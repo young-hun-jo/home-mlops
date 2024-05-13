@@ -1,2 +1,2 @@
 # home-mlops
-Building my own open-source MLOps from scratch.
+Building my own open-source MLOps from scratch
