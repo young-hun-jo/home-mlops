@@ -4,6 +4,10 @@ import bentoml
 from bentoml._internal.models.model import Model
 
 
+REASON = "unncessary-execution"
+
+
+@pytest.mark.skip(reason=REASON)
 def test_import_model_of_mlflow_in_bentoml():
     # 경로는 mlruns/$EXPERIMENT_ID/$RUN_ID/artifacts/$ARTIFACT_PATH 를 설정해주어야 함
     mlflow_path = "/Users/zedd.ai/home-mlops/mlruns/283184337928820717/0d83b6bdeea44e34b74f70f821aa239a/artifacts/iris_model"
@@ -13,4 +17,3 @@ def test_import_model_of_mlflow_in_bentoml():
         model_uri=mlflow_path
     )
     assert isinstance(model, Model), "can't laod model by mlflow using bentoml"
-    

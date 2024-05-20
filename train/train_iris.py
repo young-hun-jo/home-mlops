@@ -114,7 +114,7 @@ class IrisTabularTrainer(object):
 
 if __name__ == "__main__":
     experiment_name = "iris-exp"
-    run_name = "iris-run-git"
+    run_name = "iris-run-git-v2"
     problem = "classification"
 
     trainer = IrisTabularTrainer(experiment_name, run_name, problem)

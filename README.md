@@ -5,13 +5,16 @@ Building my own open-source MLOps from scratch
 - local 에서 개발하는 단계이므로 추후 변동 가능성 큼
 - mlflow-ui 서버에 기록되는 것들은 학습 소스코드를 실질적으로 실행하는 머신에 존재하는 상태임. 따라서 mlflow-ui 서버와 학습 소스코드를 실행하는 머신이 분리되어 있기 때문에 두 파일 시스템을 연결해야 함
     - 해당 파일 시스템은 Serving에 사용되는 BentoML 서버에도 연결되어야 함. 그래야 모델 로드가 가능할 예정(더 알아보긴 해야 함)
+- mlflow-ui는 `train` 디렉토리에서 반드시 실행해야 `mlruns` 디렉토리 한 곳에 모두 히스토리가 남음. 다른 경로에서 실행하면 다른 곳에서 `mlruns` 디렉토리가 중복해서 생겨남
+- serving의 경우, 반드시 `bentofile.yaml` 파일이 존재하는 경로에서 셸 스크립트를 실행해야 함
+
  
 ![스크린샷 2024-05-17 오후 10 24 47](https://github.com/young-hun-jo/home-mlops/assets/54783194/c3cc1d7d-27a1-4cb1-abd4-9e85906ff52e)
 
 ## 🔗 Referecne
 - mlflow 실행하면서 생성되는 `mlruns` 디렉토리 구조
 ```
-📦mlruns
+📦mlruns : `mlflow ui` command를 실행하는 경로 기준으로 생성됨
  ┣ 📂$EXPERIMENT_ID
  ┃ ┣ 📂$RUN_ID
  ┃ ┃ ┣ 📂artifacts

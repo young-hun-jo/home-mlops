@@ -1,20 +1,20 @@
+import os
 import numpy as np
 import bentoml
 from bentoml.io import NumpyNdarray
 
 
-path = "/Users/zedd.ai/home-mlops/mlruns/283184337928820717/0d83b6bdeea44e34b74f70f821aa239a/artifacts/iris_model"
-# `bentoml._internal.models.model.Model` object
-iris_clf_model = bentoml.mlflow.import_model(
-    name="zedd-iris-clf-in-mlflow",
-    model_uri=path
-)
+# envs
+bentoml_svc_name = os.getenv("BENTOML_SVC_NAME")
+bentoml_model_name = os.getenv("BENTOML_MODEL_NAME")
 
+# load mlflow-trained model in bento-ml Model Store and convert it to bento-ml runner object
+iris_clf_model = bentoml.mlflow.get(f"{bentoml_model_name}:latest")
 iris_clf_runner = iris_clf_model.to_runner()
 
 # Service 객체 생성 -> 데코레이터 떄와는 달리 여기서 서비스 이름을 지명
 svc = bentoml.Service(
-    name="zedd_iris_classifier",
+    name=bentoml_svc_name,
     runners=[iris_clf_runner]
 )
 
