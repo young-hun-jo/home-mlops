@@ -5,9 +5,10 @@ export MLFLOW_EXPERIMENT_ID="$1"
 export MLFLOW_RUN_ID="$2"
 export BENTOML_MODEL_NAME="$3"
 export BENTOML_SVC_NAME="$4"
+export BENTOML_AR_NAME="$5"
 
 LOGGER=$(date '+%Y-%m-%d %H:%M:%S')
-echo -e "$LOGGER INFO:: your setting envs are:\nMLRUNS_DIR=$MLRUNS_DIR\nMLFLOW_EXPERIMENT_ID=$MLFLOW_EXPERIMENT_ID\nMLFLOW_RUN_ID=$MLFLOW_RUN_ID\nBENTOML_MODEL_NAME=$BENTOML_MODEL_NAME\nBENTOML_SVC_NAME=$BENTOML_SVC_NAME\n"
+echo -e "$LOGGER INFO:: your setting envs are:\nMLRUNS_DIR=$MLRUNS_DIR\nMLFLOW_EXPERIMENT_ID=$MLFLOW_EXPERIMENT_ID\nMLFLOW_RUN_ID=$MLFLOW_RUN_ID\nBENTOML_MODEL_NAME=$BENTOML_MODEL_NAME\nBENTOML_SVC_NAME=$BENTOML_SVC_NAME\nBENTOML_AR_NAME=$BENTOML_AR_NAME\n"
 
 
 #=========================================================================
@@ -53,13 +54,19 @@ tmp="${BENTOML_MODEL_NAME}:latest" yq e --inplace '.models[0] = env(tmp)' $bento
 bentoml build -f $bentofile && \
 # conatinerize bento to docker image
 bentoml containerize $BENTOML_SVC_NAME:latest && \
-img_tag=$(bentoml list | grep -E "$BENTOML_SVC_NAME" | sort -r -k 4 | head -n 1 | awk '{print $1}') && echo $LOGGER DOCKER_IMAGE: $img_tag && \
-# run bento-ml serving conatiner
-docker run -d \
---name $BENTOML_SVC_NAME \
--p 8000:3000 \
--e BENTOML_SVC_NAME=$BENTOML_SVC_NAME \
--e BENTOML_MODEL_NAME=$BENTOML_MODEL_NAME \
--e model_uri=$model_uri \
-$img_tag \
-serve
+bentoml_img_tag=$(bentoml list | grep -E "$BENTOML_SVC_NAME" | sort -r -k 4 | head -n 1 | awk '{print $1}') && echo $LOGGER BENTOML_TAG_NAME: $bentoml_img_tag && \
+# rename tagname of docker image for pushing to docker hub registry
+rename_img_tag=$(echo $BENTOML_AR_NAME:$(echo $bentoml_img_tag | sed 's/:/-/')) && echo $LOGGER DOCKER_IMAGE_TAG: $rename_img_tag && \
+docker image tag "$bentoml_img_tag" "$rename_img_tag" && docker rmi $bentoml_img_tag && \
+docker push $rename_img_tag
+
+
+### docker-cli for run bento-ml serving conatiner
+### docker-hub url: https://hub.docker.com/repository/docker/jo181/bentoml-serving/general
+# docker run -d \
+# --name $BENTOML_SVC_NAME \
+# -p 8000:3000 \
+# -e BENTOML_SVC_NAME=$BENTOML_SVC_NAME \
+# -e BENTOML_MODEL_NAME=$BENTOML_MODEL_NAME \
+# $img_tag \
+# serve
