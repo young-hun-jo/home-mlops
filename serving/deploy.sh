@@ -70,3 +70,7 @@ docker push $rename_img_tag
 # -e BENTOML_MODEL_NAME=$BENTOML_MODEL_NAME \
 # $img_tag \
 # serve
+
+# TO-DO
+# ㄴ iris-classifier에 맞는 FastAPI 앱 만들기
+# ㄴ FastAPI <-> BentoML docker-compose로 띄워보고 통신 테스

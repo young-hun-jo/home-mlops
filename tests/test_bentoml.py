@@ -1,5 +1,7 @@
 import pytest 
 import bentoml
+import requests
+import json
 
 from bentoml._internal.models.model import Model
 
@@ -17,3 +19,13 @@ def test_import_model_of_mlflow_in_bentoml():
         model_uri=mlflow_path
     )
     assert isinstance(model, Model), "can't laod model by mlflow using bentoml"
+
+
+def test_bentoml_api():
+    # assume iris-classifier
+    url = "http://localhost:8000/predict"
+    headers = {"Content-Type": "application/json", "accept": "application/json"}
+    data = [[1.0, 2.0, 3.0, 4.0]]
+    resp = requests.post(url=url, headers=headers, data=json.dumps(data))
+    assert isinstance(resp.json(), list)
+    assert isinstance(resp.json()[0], int)

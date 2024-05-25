@@ -12,4 +12,4 @@ python:
     - numpy
 # sector that don't need to modify
 models:
-  - bentoml-zedd-iris-clf:latest
+  - zedd-iris-clf:latest
