@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+  fastapi:
+    image: jo181/fastapi-serving:tabular-iris-svc
+    ports:
+      - "8000:8000"
+    depends_on:
+      - bento
+  bento:
+    image: jo181/bentoml-serving:tabular-iris-svc-nwfxlkq3hkqefbxq
+    environment:
+      - BENTOML_SVC_NAME=tabular-iris-svc
+      - BENTOML_MODEL_NAME=tabular-iris-clf-bento
+    command: serve
+  
