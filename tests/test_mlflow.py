@@ -21,5 +21,3 @@ def test_log_metrics():
     mlflow.set_experiment("test-mlflow-exp")
     with mlflow.start_run(run_name="test-log-metrics"):
         mlflow.log_metrics(metrics)
-
-

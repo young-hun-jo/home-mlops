@@ -1,3 +1,9 @@
+import mlflow
+import pymysql 
+import json
+
+from mlflow.models import infer_signature
+
 from sklearn.datasets import load_iris 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -8,9 +14,6 @@ from sklearn.metrics import (
     f1_score,
     roc_auc_score
 )
-
-import mlflow
-from mlflow.models import infer_signature
 
 
 class IrisTabularTrainer(object):
@@ -24,6 +27,7 @@ class IrisTabularTrainer(object):
         self.run_name = run_name
         self.problem = problem
         self.random_state = 42
+        # self.db = self.connect_to_db()
 
     def __call__(self):
         model_info = self.forward()
@@ -91,6 +95,7 @@ class IrisTabularTrainer(object):
     
     def register_mlflow(self, X_test, model):
         mlflow.set_experiment(experiment_name=self.experiment_name)
+        mlflow.set_experiment_tag("uuid", "zedd")
         with mlflow.start_run(run_name=self.run_name):
             # tag about run
             mlflow.set_tag("Training-info", "localhost test for iris-dataset")
@@ -111,10 +116,20 @@ class IrisTabularTrainer(object):
                 registered_model_name="iris-classifier"
             )
 
+    def connect_to_db():
+        db = pymysql.connect(host="localhost", port=3306, user="root", passwd="zedd-ai", db="mlflow_db", charset="utf8")
+        return db
+
+    def insert_row_to_db():
+        sql = """
+            insert into training_history(experiment_id, run_id, problem, model_type, params, metrics, signature)
+            values(%s, %s, %s, %s, %s, %s, %s)
+         """
+
 
 if __name__ == "__main__":
-    experiment_name = "tabular-iris-clf-exp"
-    run_name = "tabular-iris-clf-run"
+    experiment_name = "experiment-tag-test"
+    run_name = "experiment-tag-test-run"
     problem = "classification"
 
     trainer = IrisTabularTrainer(experiment_name, run_name, problem)
