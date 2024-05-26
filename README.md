@@ -8,8 +8,7 @@ Building my own open-source MLOps from scratch
 - mlflow-ui는 `train` 디렉토리에서 반드시 실행해야 `mlruns` 디렉토리 한 곳에 모두 히스토리가 남음. 다른 경로에서 실행하면 다른 곳에서 `mlruns` 디렉토리가 중복해서 생겨남
 - serving의 경우, 반드시 `bentofile.yaml` 파일이 존재하는 경로에서 셸 스크립트를 실행해야 함
 
- 
-![스크린샷 2024-05-17 오후 10 24 47](https://github.com/young-hun-jo/home-mlops/assets/54783194/c3cc1d7d-27a1-4cb1-abd4-9e85906ff52e)
+![스크린샷 2024-05-26 오후 6 21 12](https://github.com/young-hun-jo/home-mlops/assets/54783194/e455eaa4-1b11-4a4f-b014-22ed0a62af14)
 
 ## 🔗 Referecne
 - mlflow 실행하면서 생성되는 `mlruns` 디렉토리 구조
