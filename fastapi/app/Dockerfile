@@ -1,6 +1,7 @@
 FROM python:3.10-slim-bullseye
 
-ENV APP_HOME /app
+ARG SVC_NAME
+ENV APP_HOME /${SVC_NAME}}/app
 RUN apt update && apt -y install git vim curl
 COPY . ${APP_HOME}
 WORKDIR ${APP_HOME}

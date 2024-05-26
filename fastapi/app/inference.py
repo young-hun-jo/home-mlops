@@ -10,7 +10,7 @@ def preprocess(request: IrisRequest) -> list[list[float]]:
 
 def post_to_bentoml(request: list[list[float]]) -> list[int]:
     headers = {"Content-Type": "application/json", "accept": "application/json"}
-    url = "http://localhost:8000/predict"
+    url = "http://bento:3000/predict"
     response = requests.post(url=url, headers=headers, data=json.dumps(request))
     if response.status_code != 200:
         return [999999]
