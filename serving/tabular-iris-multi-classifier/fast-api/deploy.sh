@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export SVC_NAME="$1"
+export BENTO_SVC_NAME="$2"
 export AR_NAME=jo181/fastapi-serving
 
 LOGGER=$(date '+%Y-%m-%d %H:%M:%S')
@@ -9,13 +10,14 @@ LOGGER=$(date '+%Y-%m-%d %H:%M:%S')
 docker build \
 -t $AR_NAME:$SVC_NAME \
 --build-arg SVC_NAME=$SVC_NAME \
+--build-arg BENTO_SVC_NAME=$BENTO_SVC_NAME \
 -f Dockerfile \
 .
 
 echo $LOGGER IMAGE_NAME: $AR_NAME:$SVC_NAME
 
 # push fastapi image to docker hub
-docker push $AR_NAME:$SVC_NAME
+docker push $AR_NAME:$SVC_NAME && docker rmi $AR_NAME:$SVC_NAME
 
 # docker run \
 # --name $SVC_NAME \

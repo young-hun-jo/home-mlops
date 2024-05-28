@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+  tabular-iris-multi-classifier-fastapi-svc:
+    image: jo181/fastapi-serving:tabular-iris-multi-classifier-fastapi-svc
+    ports:
+      - "8000:8000"
+    depends_on:
+      - tabular-iris-multi-classifier-bento-svc
+  tabular-iris-multi-classifier-bento-svc:
+    image: jo181/bentoml-serving:tabular-iris-multi-classifier-bento-svc-3jo5soq5awmrnbxq
+    environment:
+      - BENTOML_SVC_NAME=tabular-iris-multi-classifier-bento-svc
+      - BENTOML_MODEL_NAME=tabular-iris-multi-classifier-bento-model
+    command: serve
+    

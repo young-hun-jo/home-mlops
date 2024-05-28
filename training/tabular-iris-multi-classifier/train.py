@@ -1,5 +1,4 @@
 import mlflow
-import pymysql 
 import json
 
 from mlflow.models import infer_signature
@@ -116,20 +115,10 @@ class IrisTabularTrainer(object):
                 registered_model_name="iris-classifier"
             )
 
-    def connect_to_db():
-        db = pymysql.connect(host="localhost", port=3306, user="root", passwd="zedd-ai", db="mlflow_db", charset="utf8")
-        return db
-
-    def insert_row_to_db():
-        sql = """
-            insert into training_history(experiment_id, run_id, problem, model_type, params, metrics, signature)
-            values(%s, %s, %s, %s, %s, %s, %s)
-         """
-
 
 if __name__ == "__main__":
-    experiment_name = "experiment-tag-test"
-    run_name = "experiment-tag-test-run"
+    experiment_name = "tabular-iris-multi-classifier-exp"
+    run_name = "tabular-iris-multi-classifier-run"
     problem = "classification"
 
     trainer = IrisTabularTrainer(experiment_name, run_name, problem)

@@ -1,9 +1,14 @@
 FROM python:3.10-slim-bullseye
 
 ARG SVC_NAME
-ENV APP_HOME /${SVC_NAME}}/app
+ARG BENTO_SVC_NAME
+
+ENV BENTO_SVC_NAME ${BENTO_SVC_NAME}
+ENV APP_HOME /${SVC_NAME}/app
+
 RUN apt update && apt -y install git vim curl
-COPY . ${APP_HOME}
+
+COPY ./app ${APP_HOME}
 WORKDIR ${APP_HOME}
 RUN pip install --upgrade pip && pip install --no-cache -r requirements.txt
 EXPOSE 8000

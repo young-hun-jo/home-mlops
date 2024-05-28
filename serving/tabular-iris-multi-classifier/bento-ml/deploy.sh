@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export MLRUNS_DIR=$(git rev-parse --show-toplevel)/train/mlruns
+export MLRUNS_DIR=$(git rev-parse --show-toplevel)/training/mlruns
 export MLFLOW_EXPERIMENT_ID="$1"
 export MLFLOW_RUN_ID="$2"
 export BENTOML_MODEL_NAME="$3"
@@ -58,7 +58,7 @@ bentoml_img_tag=$(bentoml list | grep -E "$BENTOML_SVC_NAME" | sort -r -k 4 | he
 # rename tagname of docker image for pushing to docker hub registry
 rename_img_tag=$(echo $BENTOML_AR_NAME:$(echo $bentoml_img_tag | sed 's/:/-/')) && echo $LOGGER DOCKER_IMAGE_TAG: $rename_img_tag && \
 docker image tag "$bentoml_img_tag" "$rename_img_tag" && docker rmi $bentoml_img_tag && \
-docker push $rename_img_tag
+docker push $rename_img_tag && docker rmi $rename_img_tag
 
 
 ### docker-cli for run bento-ml serving conatiner
@@ -70,7 +70,3 @@ docker push $rename_img_tag
 # -e BENTOML_MODEL_NAME=$BENTOML_MODEL_NAME \
 # $img_tag \
 # serve
-
-# TO-DO
-# ㄴ iris-classifier에 맞는 FastAPI 앱 만들기
-# ㄴ FastAPI <-> BentoML docker-compose로 띄워보고 통신 테스

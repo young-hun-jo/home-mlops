@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export MLFLOW_UI=ghcr.io/young-hun-jo/mlflow-ui:v1
-export MLRUNS_DIR=$(git rev-parse --show-toplevel)/train/mlruns
+export MLRUNS_DIR=$(git rev-parse --show-toplevel)/training/mlruns
 
 docker run -d \
 --name mlflow-ui \

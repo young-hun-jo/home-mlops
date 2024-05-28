@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from uvicorn.workers import UvicornWorker
 
-from inference import infer
-from schema import IrisRequest, IrisResponse
+from models.inference import classifier
+from schema.request import IrisRequest, IrisResponse
 
 
 class CustomUvicornWorker(UvicornWorker):
@@ -22,4 +22,4 @@ def health_check():
 
 @app.post("/predict", response_model=IrisResponse)
 def predict(request: IrisRequest):
-    return infer(request)
+    return classifier(request)

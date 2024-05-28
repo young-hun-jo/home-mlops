@@ -12,4 +12,4 @@ python:
     - numpy
 # sector that don't need to modify
 models:
-  - tabular-iris-clf-bento:latest
+  - tabular-iris-multi-classifier-bento-model:latest
