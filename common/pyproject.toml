@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "home-mlops-training"
+version = "0.0.0"
+authors = [
+    { name="young-hun-jo", email="steadyist357@gmail.com"}
+]
+description = "package including commonly used module in `home-mlops` training step"
+requires-python = ">=3.10"
+dependencies = [
+    "mlflow==2.12.2",
+    "bentoml==1.2.16"
+]

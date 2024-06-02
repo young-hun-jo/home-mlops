@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+  tabular-diabetes-regressor-v1-bento-svc:
+    image: jo181/bentoml-serving:tabular-diabetes-regressor-v1-bento-svc-5twbmwrawozfxbxq
+    environment:
+      - BENTOML_SVC_NAME=tabular-diabetes-regressor-v1-bento-svc
+      - BENTOML_MODEL_NAME=tabular-diabetes-regressor-v1-bento-model
+    command: serve
+  tabular-diabetes-regressor-v1-fastapi-svc:
+    image: jo181/fastapi-serving:tabular-diabetes-regressor-v1-fastapi-svc
+    ports:
+      - "8000:8000"
+    depends_on:
+      - tabular-diabetes-regressor-v1-bento-svc
+    

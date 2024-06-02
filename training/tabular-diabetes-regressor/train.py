@@ -1,23 +1,17 @@
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
 import mlflow
 import json
 
 from mlflow.models import infer_signature
 
-from sklearn.datasets import load_iris 
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    roc_auc_score
-)
-
 from home.utils import set_mlflow_backend_store_uri
 
 
-class IrisTabularTrainer(object):
+class DiabetesTabularTrainer(object):
     def __init__(
             self,
             experiment_name: str,
@@ -40,7 +34,7 @@ class IrisTabularTrainer(object):
 
         # define model and fit
         self.params = self.set_params_of_model()
-        model = LogisticRegression(**self.params)
+        model = RandomForestRegressor(**self.params)
         model.fit(X_train, y_train)
 
         # evaluate
@@ -50,35 +44,32 @@ class IrisTabularTrainer(object):
         model_info = self.register_mlflow(X_test, model)
 
     def load_dataset(self):
-        X, y = load_iris(return_X_y=True)
+        X, y = load_diabetes(return_X_y=True, as_frame=True)
+
         return X, y
     
     def set_params_of_model(self) -> dict:
         params = {
-            "solver": "lbfgs",
-            "max_iter": 1000,
-            "multi_class": "auto",
+            "n_estimators": 200,
+            "max_depth": 3,
             "random_state": self.random_state
         }
         return params
     
     def evaluate(self, model, X_train, X_test, y_train, y_test):
-        train_proba = model.predict_proba(X_train)[:,1]
         train_pred = model.predict(X_train)
-
-        test_proba = model.predict_proba(X_test)[:,1]
         test_pred = model.predict(X_test)
+
         # calculate metrics
-        train_metrics = self.calculate_metrics(y_train, train_pred, train_proba, is_train=True)
-        test_metrics = self.calculate_metrics(y_test, test_pred, test_proba, is_train=False)
+        train_metrics = self.calculate_metrics(y_train, train_pred, is_train=True)
+        test_metrics = self.calculate_metrics(y_test, test_pred, is_train=False)
 
         self.metrics = {**train_metrics, **test_metrics}
         
-    def calculate_metrics(self, y_true, y_pred, y_proba, is_train=True) -> dict:
-        acc = accuracy_score(y_true, y_pred)
-        pre = precision_score(y_true, y_pred, average="micro")
-        rec = recall_score(y_true, y_pred, average="micro")
-        f1_s = f1_score(y_true, y_pred, average="micro")
+    def calculate_metrics(self, y_true, y_pred, is_train=True) -> dict:
+        mse = mean_squared_error(y_true, y_pred)
+        mae = mean_absolute_error(y_true, y_pred)
+        r2score = r2_score(y_true, y_pred)
         
         if is_train:
             key = "train"
@@ -86,10 +77,9 @@ class IrisTabularTrainer(object):
             key = "validation"
         return {
             key: {
-                "accuracy": acc,
-                "precision": pre,
-                "recall": rec,
-                "f1-score": f1_s
+                "MSE": mse,
+                "MAE": mae,
+                "R2-score": r2score
             }
         }
     
@@ -97,10 +87,9 @@ class IrisTabularTrainer(object):
         set_mlflow_backend_store_uri()
 
         mlflow.set_experiment(experiment_name=self.experiment_name)
-        mlflow.set_experiment_tag("uuid", "zedd")
         with mlflow.start_run(run_name=self.run_name):
             # tag about run
-            mlflow.set_tag("Training-info", "localhost test for iris-dataset")
+            mlflow.set_tag("Training-info", "localhost test for diabetes-dataset")
 
             # params
             mlflow.log_params(self.params)
@@ -112,17 +101,17 @@ class IrisTabularTrainer(object):
             # model
             model_info = mlflow.sklearn.log_model(
                 sk_model=model,
-                artifact_path="iris_model",
+                artifact_path="diabetes-model",
                 signature=signature,
                 input_example=X_test,
-                registered_model_name="iris-classifier"
+                registered_model_name="diabetes-regressor"
             )
 
 
 if __name__ == "__main__":
-    experiment_name = "tabular-iris-multi-classifier-exp"
-    run_name = "tabular-iris-multi-classifier-run"
-    problem = "classification"
+    experiment_name = "tabular-diabetes-regressor-exp"
+    run_name = "tabular-diabetes-regressor-run"
+    problem = "regression"
 
-    trainer = IrisTabularTrainer(experiment_name, run_name, problem)
+    trainer = DiabetesTabularTrainer(experiment_name, run_name, problem)
     model_info = trainer()

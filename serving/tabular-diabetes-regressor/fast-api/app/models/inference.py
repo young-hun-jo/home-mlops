@@ -3,31 +3,32 @@ import os
 import requests
 
 from fastapi import HTTPException
-from schema.request import IrisRequest, IrisResponse
+from schema.request import DiabetesRequest
+from schema.response import DiabetesResponse
 
 
-class Classifier(object):
+class Regressor(object):
     def __init__(self):
         self.bento_svc_name = os.getenv("BENTO_SVC_NAME", "localhost")
         self.headers = {"Content-Type": "application/json", "accept": "application/json"}
         self.bento_svc = f"http://{self.bento_svc_name}:3000/predict"
 
-    def __call__(self, request: IrisRequest) -> IrisResponse:
+    def __call__(self, request: DiabetesRequest) -> DiabetesResponse:
         return self.forward(request)
      
-    def forward(self, request: IrisRequest) -> IrisResponse:
+    def forward(self, request: DiabetesRequest) -> DiabetesResponse:
         # preprocess
         request: list[list[float]] = self.preprocess(request)
         # prediction
         response: list[int] = self.predict_bento(request)
         # postprocess
         response: int = self.postprocess(response[0])
-        return IrisResponse(
-            label=response
+        return DiabetesResponse(
+            target=response
         )
 
-    def preprocess(self, request: IrisRequest) -> list[list[float]]:
-        return [list(request.dict().values())]
+    def preprocess(self, request: DiabetesRequest) -> list[list[float]]:
+        return [list(request.model_dump().values())]
     
     def predict_bento(self, request: list[list[float]]) -> list[int]:
         resp = requests.post(
@@ -44,4 +45,4 @@ class Classifier(object):
         return label
 
 
-classifier = Classifier()
+regressor = Regressor()
