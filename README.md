@@ -1,14 +1,129 @@
 # home-mlops
 Building my own open-source MLOps from scratch
 
-## 1. Step00: local 구조
-- local 에서 개발하는 단계이므로 추후 변동 가능성 큼
-- mlflow-ui 서버에 기록되는 것들은 학습 소스코드를 실질적으로 실행하는 머신에 존재하는 상태임. 따라서 mlflow-ui 서버와 학습 소스코드를 실행하는 머신이 분리되어 있기 때문에 두 파일 시스템을 연결해야 함
-    - 해당 파일 시스템은 Serving에 사용되는 BentoML 서버에도 연결되어야 함. 그래야 모델 로드가 가능할 예정(더 알아보긴 해야 함)
-- mlflow-ui는 `train` 디렉토리에서 반드시 실행해야 `mlruns` 디렉토리 한 곳에 모두 히스토리가 남음. 다른 경로에서 실행하면 다른 곳에서 `mlruns` 디렉토리가 중복해서 생겨남
-- serving의 경우, 반드시 `bentofile.yaml` 파일이 존재하는 경로에서 셸 스크립트를 실행해야 함
+- 나홀로 집에서 구축하는 Home MLOps 시스템은 다음의 환경에 따라 실행 방법이 상이함
+    - dev: 로컬 환경
+    - prod: 운영 환경
+
+## 1. dev
+dev 에서의 애플리케이션 아키텍처 구조는 다음과 같
 
 ![스크린샷 2024-06-02 오후 5 22 12](https://github.com/young-hun-jo/home-mlops/assets/54783194/32536039-ab68-4f1f-8c11-e7b329521cd7)
+
+### 1-2. Tutorials
+#### Step00
+- clone github repository
+```bash
+git clone https://github.com/young-hun-jo/home-mlops.git
+```
+- structure of projcet
+```
+home-mlops
+┣ common 
+┣ serving
+┃ ┣ $APP_NAME_1
+┃ ┃ ┣ bento-ml
+┃ ┃ ┣ fast-api
+┃ ┣ $APP_NAME_2
+┃ ┃ ┣ bento-ml
+┃ ┃ ┣ fast-api
+┣ training
+┃ ┣ mlruns       # directory archiving artifacts and metadata for trained model in MLflow
+┃ ┣ $APP_NAME_1
+┃ ┃ ┣ train.py
+┃ ┣ $APP_NAME_2
+┗ ┗ ┗ train.py
+```
+
+- install dependencies
+```bash
+pip install -e home-mlops/common
+```
+- 학습된 모델에 대한 다양한 artifacts, metadata를 트래킹할 수 있는 MLflow UI 서버를 컨테이너 형태로 배포
+```bash
+home-mlops/training/deploy.sh
+```
+- Container Registry Repository 2개를 생성
+    - ex) Docker-hub, Github Container Registry, Google Cloud Artifact Registry, ...
+    - BentoML Serving 용 1개
+    - FastAPI Serving 용 1개
+    - <a href='https://hub.docker.com/repositories/jo181'>example registry</a>
+
+#### Step01: Training
+- 오픈소스 모델을 사용해서 학습시키되 반드시 스크립트에 `` 함수를 initialize 시켜주기
+```python
+from home.utils import set_mlflow_backend_store_uri
+
+import mlflow
+
+# necessarily initialize !
+set_mlflow_backend_store_uri()
+
+
+...(train source code)...
+```
+
+#### Step02: Build Serving(1) - BentoML
+- 4가지 파일이 필요
+```
+build.sh : build Bento, image, and push it to container registry
+bentofile.yaml : configuration for building Bento
+import.py : save model trained by MLflow to BentoML Model Store
+service.py : define BentoML Serving API (only defined functional interface not Class)
+```
+- 4개의 argument를 입력한 후 `build.sh` 스크립트 실행
+- 이 때, 반드시 `bentofile.yaml` 파일이 존재하는 경로에서 스크립트를 실행
+```bash
+export MLFLOW_EXPERIMENT_ID="experiment-id"     # MLflow에 모델이 학습될 때 등록된 실험 ID
+export MLFLOW_RUN_ID="run-id"                   # MLflow에 모델이 학습될 때 등록된 Run ID
+export APP_NAME="iris-classifier"               # 만들고자 하는 애플리케이션 이름 명시
+export BENTOML_AR_NAME="jo181/bentoml-serving"  # image가 저장될 registry repository 주소 
+
+./build.sh $MLFLOW_EXPERIMENT_ID $MLFLOW_RUN_ID $APP_NAME $BENTOML_AR_NAME
+```
+- registry에 가서 push된 이미지 이름 확인 후, 배포 때 활용 예정
+
+#### Step03: Build Serving(2) - FastAPI
+- BentoML Serving API와 통신하는 로직을 추가여 소스코드 개발(<a href='https://github.com/young-hun-jo/home-mlops/blob/e277ef86d50a72b101b5c429c1e8d9e870d083f4/serving/tabular-iris-multi-classifier/fast-api/app/models/inference.py#L32-L36'>example</a>)
+- 2개의 argument를 입력한 후, `build.sh` 스크립트 실행
+- 이 때, 반드시 `Dockerfile` 파일이 존재하는 경로에서 스크립트를 실행
+```bash
+export APP_NAME="iris-classifier" # 만들고자 하는 애플리케이션 이름 명시(BentoML에서의 이름과 동일 권장)
+export FASTAPI_AR_NAME="jo181/fastapi-serving"  # image가 저장될 registry repository 주소
+
+./build.sh $APP_NAME $FASTAPI_AR_NAME
+```
+- registry에 가서 push된 이미지 이름 확인 후, 배포 때 활용 예정
+
+#### Step04: Deployment
+- `docker-compose.yaml` 파엘에 아래의 내용을 기입
+```yml
+version: '3.0'
+services:
+  ${APP_NAME}-bento-svc:
+    image: `specify your bento image uri`
+    environment:
+      - BENTOML_SVC_NAME=${APP_NAME}-bento-svc
+      - BENTOML_MODEL_NAME=${APP_NAME}-bento-model
+    command: serve
+  ${APP_NAME}-fastapi-svc:
+    image: `specify your fastapi image uri`
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ${APP_NAME}-bento-svc
+```
+- BentoML, FastAPI 배포
+```bash
+docker-compose up -d
+```
+
+#### Step05: Test
+- FastAPI application URL
+```
+http://localhost:8000
+```
+
 
 ## 🔗 Referecne
 
