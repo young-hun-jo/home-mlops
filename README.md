@@ -11,7 +11,7 @@ dev 에서의 애플리케이션 아키텍처 구조는 다음과 같
 ![스크린샷 2024-06-02 오후 5 22 12](https://github.com/young-hun-jo/home-mlops/assets/54783194/32536039-ab68-4f1f-8c11-e7b329521cd7)
 
 ### 1-2. Tutorials
-#### Step00
+#### Step00: Introduction 
 - clone github repository
 ```bash
 git clone https://github.com/young-hun-jo/home-mlops.git
@@ -50,7 +50,7 @@ home-mlops/training/deploy.sh
     - <a href='https://hub.docker.com/repositories/jo181'>example registry</a>
 
 #### Step01: Training
-- 오픈소스 모델을 사용해서 학습시키되 반드시 스크립트에 `` 함수를 initialize 시켜주기
+- 오픈소스 모델을 사용해서 학습시키되 반드시 스크립트에 `set_mlflow_backend_store_uri` 함수를 initialize 시켜주기
 ```python
 from home.utils import set_mlflow_backend_store_uri
 
