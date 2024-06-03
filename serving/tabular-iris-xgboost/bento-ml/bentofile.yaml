@@ -1,0 +1,15 @@
+# sector that modify
+service: "service:svc"
+labels:
+  onwer: zedd-ai
+  stage: local
+include:
+  - "service.py"
+python:
+  packages:
+    - mlflow==2.12.2
+    - numpy==1.26.4
+    - xgboost==2.0.3
+# sector that don't need to modify
+models:
+  - tabular-iris-xgboost-bento-model:latest

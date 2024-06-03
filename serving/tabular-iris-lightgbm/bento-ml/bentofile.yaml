@@ -1,0 +1,14 @@
+# sector that modify
+service: "service:svc"
+labels:
+  owner: zedd-ai
+  stage: local
+include:
+  - "service.py"
+python:
+  packages:
+    - mlflow
+    - lightgbm
+# sector that don't need to modify
+models:
+  - tabular-iris-lightgbm-bento-model:latest
