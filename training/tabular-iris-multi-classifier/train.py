@@ -100,7 +100,7 @@ class IrisTabularTrainer(object):
         mlflow.set_experiment_tag("uuid", "zedd")
         with mlflow.start_run(run_name=self.run_name):
             # tag about run
-            mlflow.set_tag("Training-info", "localhost test for iris-dataset")
+            mlflow.set_tag("Training-info", "gcs test for iris-dataset")
 
             # params
             mlflow.log_params(self.params)
@@ -112,16 +112,16 @@ class IrisTabularTrainer(object):
             # model
             model_info = mlflow.sklearn.log_model(
                 sk_model=model,
-                artifact_path="iris_model",
+                artifact_path="gcs-iris-clf-v1",
                 signature=signature,
                 input_example=X_test,
-                registered_model_name="iris-classifier"
+                registered_model_name="gcs-iris-clf-v1"
             )
 
 
 if __name__ == "__main__":
-    experiment_name = "tabular-iris-multi-classifier-exp"
-    run_name = "tabular-iris-multi-classifier-run"
+    experiment_name = "gcs-iris-clf-v1-exp"
+    run_name = "gcs-iris-clf-v1-run"
     problem = "classification"
 
     trainer = IrisTabularTrainer(experiment_name, run_name, problem)

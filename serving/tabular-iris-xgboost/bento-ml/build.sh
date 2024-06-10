@@ -12,6 +12,29 @@ export BENTOML_SVC_NAME="$APP_NAME"-bento-svc
 LOGGER=$(date '+%Y-%m-%d %H:%M:%S')
 echo -e "$LOGGER INFO:: your setting envs are:\nMLRUNS_DIR=$MLRUNS_DIR\nMLFLOW_EXPERIMENT_ID=$MLFLOW_EXPERIMENT_ID\nMLFLOW_RUN_ID=$MLFLOW_RUN_ID\nBENTOML_MODEL_NAME=$BENTOML_MODEL_NAME\nBENTOML_SVC_NAME=$BENTOML_SVC_NAME\nBENTOML_AR_NAME=$BENTOML_AR_NAME\n"
 
+# functions
+updatePkgOfBentofileYaml ()
+{
+    requirements=$(cat < $1)
+    tmp=$(yq '.python.packages' $2)
+    if [ "$tmp" = null ]; then 
+        echo $LOOGER ERROR:: .python.packages property must be exist in $2
+        exit 95
+    else 
+        yq -i 'del(.python.packages[])' $2
+        echo "$LOOGER INFO:: existing content of .python.packages property in $2 is removed"
+        echo "################ requirements.txt ################"
+
+        for requirement in $requirements
+        do
+            echo $requirement
+            pkg="${requirement}" yq e -i '.python.packages = .python.packages + [env(pkg)]' $2
+        done
+        echo "##################################################"
+        echo $LOOGER INFO:: .python.packages property is updated in $2
+    fi
+}
+
 
 #=========================================================================
 # find artifact path of mlflow trained model for importing it in bento-ml
@@ -28,6 +51,7 @@ if [ -z "$artifact_path" ]; then
     exit 98
 else
     model_uri="$artifact_dirname"/"$artifact_path"
+    requirements_path=$model_uri/requirements.txt
     echo $LOGGER INFO:: model_uri for using in bento-ml: $model_uri
 fi
 
@@ -50,8 +74,9 @@ if [ -z "$bentofile" ]; then
 fi
 # save mlflow-trained model to bento-ml Model Store 
 python import.py --bentoml_model_name="$BENTOML_MODEL_NAME" --model_uri="$model_uri" && ls -l $HOME/bentoml/models && \
-# update `models` info in bentofile configuration
+# update `models` and `python.packages` info in bentofile configuration
 tmp="${BENTOML_MODEL_NAME}:latest" yq e --inplace '.models[0] = env(tmp)' $bentofile && \
+updatePkgOfBentofileYaml $requirements_path $bentofile && \
 # build bento
 bentoml build -f $bentofile && \
 # conatinerize bento to docker image
@@ -61,14 +86,3 @@ bentoml_img_tag=$(bentoml list | grep -E "$BENTOML_SVC_NAME" | sort -r -k 4 | he
 rename_img_tag=$(echo $BENTOML_AR_NAME:$(echo $bentoml_img_tag | sed 's/:/-/')) && echo $LOGGER BENTOML_IMAGE_NAME: $rename_img_tag && \
 docker image tag "$bentoml_img_tag" "$rename_img_tag" && docker rmi $bentoml_img_tag && \
 docker push $rename_img_tag && docker rmi $rename_img_tag
-
-
-### docker-cli for run bento-ml serving conatiner
-### docker-hub url: https://hub.docker.com/repository/docker/jo181/bentoml-serving/general
-# docker run -d \
-# --name $BENTOML_SVC_NAME \
-# -p 8000:3000 \
-# -e BENTOML_SVC_NAME=$BENTOML_SVC_NAME \
-# -e BENTOML_MODEL_NAME=$BENTOML_MODEL_NAME \
-# $img_tag \
-# serve

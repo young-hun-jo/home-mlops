@@ -1,5 +1,5 @@
 # sector that modify
-service: "service:svc"
+service: "service:DiabetesRegressor"  # must be equal to name of `class`
 labels:
   onwer: zedd-ai
   stage: local
@@ -12,4 +12,4 @@ python:
     - numpy
 # sector that don't need to modify
 models:
-  - tabular-diabetes-regressor-v1-bento-model:latest
+  - tabular-diabetes-regressor-v2-bento-model:latest

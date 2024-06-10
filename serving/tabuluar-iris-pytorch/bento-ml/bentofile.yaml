@@ -1,0 +1,20 @@
+# sector that modify
+service: "service:svc"
+labels:
+  onwer: zedd-ai
+  stage: local
+include:
+  - "service.py"
+python:
+  packages:
+    - mlflow==2.12.2
+    - cloudpickle==3.0.0
+    - numpy==1.26.4
+    - nvidia-ml-py==11.525.150
+    - packaging==24.0
+    - pandas==2.2.2
+    - pyyaml==6.0.1
+    - torch==2.3.1
+# sector that don't need to modify
+models:
+  - tabular-iris-pytorch-v1-bento-model:latest

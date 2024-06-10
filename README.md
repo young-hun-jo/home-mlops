@@ -82,6 +82,7 @@ export BENTOML_AR_NAME="jo181/bentoml-serving"  # image가 저장될 registry re
 ./build.sh $MLFLOW_EXPERIMENT_ID $MLFLOW_RUN_ID $APP_NAME $BENTOML_AR_NAME
 ```
 - registry에 가서 push된 이미지 이름 확인 후, 배포 때 활용 예정
+- 참고로, 빌드가 되면서 `bentofile.yaml`에 정의되어야 하는 `.python.packages`, `.models` 항목은 자동 반영되므로 별도로 사용자가 수정하지 않아도 됨
 
 #### Step03: Build Serving(2) - FastAPI
 - BentoML Serving API와 통신하는 로직을 추가여 소스코드 개발(<a href='https://github.com/young-hun-jo/home-mlops/blob/e277ef86d50a72b101b5c429c1e8d9e870d083f4/serving/tabular-iris-multi-classifier/fast-api/app/models/inference.py#L32-L36'>example</a>)
