@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'echo "Hello zedd"'
+                sh 'echo "Hello home"'
                 sh '''
                     echo "home-mlops tutorial
                     ls -lah
