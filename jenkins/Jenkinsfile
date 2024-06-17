@@ -5,7 +5,7 @@ pipeline {
             steps {
                 sh 'echo "Hello home"'
                 sh '''
-                    echo "home-mlops tutorial
+                    echo "home-mlops tutorial"
                     ls -lah
                 '''
             }
