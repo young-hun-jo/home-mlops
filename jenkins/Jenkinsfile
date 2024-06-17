@@ -1,14 +1,27 @@
 pipeline {
     agent any 
     stages {
-        stage('Build') {
+        stage('TEST') {
             steps {
-                sh 'echo "Hello home"'
-                sh '''
-                    echo "home-mlops tutorial"
-                    ls -lah
-                '''
+                sh 'echo Hello TEST; exit 1'
             }
+        }
+    }
+    post {
+        always {
+            echo "verbose always"
+        }
+        success {
+            echo "verbose success"
+        }
+        failure {
+            echo "verbose failure"
+        }
+        unstable {
+            echo "verbose unstable"
+        }
+        changed {
+            echo "verbose changed!"
         }
     }
 }
