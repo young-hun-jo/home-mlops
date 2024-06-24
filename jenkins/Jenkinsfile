@@ -1,35 +1,10 @@
 pipeline {
-    agent any
+    agent { docker { image 'python:3.12.1-alpine3.19' } }
     stages {
-        stage('Deploy - Staging') {
+        stage('build') {
             steps {
-                sh 'echo Staging'
-            }
-        }
-
-        stage('Sanity check') {
-            steps {
-                input "Does the staging environment look ok?"
-            }
-        }
-
-        stage('Deploy - Production') {
-            steps {
-                sh 'echo Production'
+                sh 'echo "Hello zedd"'
             }
         }
     }
 }
-
-
-/* Requires the Docker Pipeline plugin */
-// pipeline {
-//     agent { docker { image 'python:3.12.1-alpine3.19' } }
-//     stages {
-//         stage('build') {
-//             steps {
-//                 sh 'echo "Hello zedd"'
-//             }
-//         }
-//     }
-// }
