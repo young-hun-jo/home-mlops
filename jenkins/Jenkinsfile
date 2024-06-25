@@ -11,5 +11,10 @@ pipeline {
                 sh 'cd serving/${APP_NAME} && pwd && ls -l'
             }
         }
+        stage('Check pwd') {
+            steps {
+                sh 'pwd'
+            }
+        }
     }
 }
