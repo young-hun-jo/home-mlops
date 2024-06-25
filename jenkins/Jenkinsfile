@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Check pwd') {
             steps {
-                sh 'pwd'
+                sh 'echo $USER'
             }
         }
     }
