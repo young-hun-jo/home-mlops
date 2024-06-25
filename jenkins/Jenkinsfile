@@ -6,5 +6,10 @@ pipeline {
                 sh 'pwd && ls -l'
             }
         }
+        stage('Move dir') {
+            steps {
+                sh 'cd serving && pwd && ls -l'
+            }
+        }
     }
 }
