@@ -1,14 +1,14 @@
 pipeline {
     agent any
+    
+    environment {
+        APP_NAME = 'tabular-diabetes-regressor'
+    }
+
     stages {
-        stage('Check pwd') {
+        stage('Moving directory') {
             steps {
-                sh 'pwd && ls -l'
-            }
-        }
-        stage('Move dir') {
-            steps {
-                sh 'cd serving && pwd && ls -l'
+                sh 'cd ${APP_NAME} && pwd && ls -l'
             }
         }
     }
