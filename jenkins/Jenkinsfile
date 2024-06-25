@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Moving directory') {
             steps {
-                sh 'cd ${APP_NAME} && pwd && ls -l'
+                sh 'cd serving/${APP_NAME} && pwd && ls -l'
             }
         }
     }
