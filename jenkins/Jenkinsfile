@@ -9,7 +9,7 @@ pipeline {
         stage('Moving directory') {
             steps {
                 sh 'cd serving/${APP_NAME} && pwd && ls -l'
-            }
+            },
             steps {
                 sh 'pwd'
             }
