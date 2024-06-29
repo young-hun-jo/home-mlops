@@ -13,7 +13,7 @@ pipeline {
         stage('Build bento') {
             steps {
                 sh 'cd serving && ls -l'
-                sh './bento.sh ${APP_NAME} ${EXPERIMENT_ID} ${RUN_ID} ${NAS_NAME} ${AR_NAME}'
+                sh 'echo $(pwd)'
             }
         }
     }
