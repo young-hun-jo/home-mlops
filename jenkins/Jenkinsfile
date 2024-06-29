@@ -1,20 +1,20 @@
 pipeline {
     agent any
-    
-    environment {
-        APP_NAME = 'tabular-diabetes-regressor'
+    parameters {
+        choice(
+            choices: ['greeting' , 'silence'],
+            description: '',
+            name: 'REQUESTED_ACTION')
     }
 
     stages {
-        stage('Moving directory') {
-            steps {
-                sh 'cd serving/${APP_NAME} && ls -l'
-                sh 'pwd'
+        stage ('Speak') {
+            when {
+                // Only say hello if a "greeting" is requested
+                expression { params.REQUESTED_ACTION == 'greeting' }
             }
-        }
-        stage('Check pwd') {
             steps {
-                sh 'echo $USER'
+                echo "Hello, bitwiseman!"
             }
         }
     }
