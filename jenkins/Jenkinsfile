@@ -14,7 +14,7 @@ pipeline {
             steps {
                 sh 'cd serving && ls -l'
             }
-            setps {
+            steps {
                 sh 'echo $(pwd)'
             }
         }
