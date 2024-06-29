@@ -13,7 +13,7 @@ pipeline {
         stage('Build bento') {
             steps {
                 sh 'cd serving && ls -l'
-                sh 'echo $(pwd)'
+                sh 'echo $(pwd) && ls -l'
             }
         }
     }
