@@ -10,12 +10,10 @@ pipeline {
     }
 
     stages {
-        stage('Moving serving directory') {
+        stage('Build bento') {
             steps {
                 sh 'cd serving && ls -l'
-            }
-            steps {
-                sh 'echo $(pwd)'
+                sh './bento.sh ${APP_NAME} ${EXPERIMENT_ID} ${RUN_ID} ${NAS_NAME} ${AR_NAME}'
             }
         }
     }
