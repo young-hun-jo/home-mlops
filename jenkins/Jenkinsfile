@@ -1,20 +1,21 @@
 pipeline {
     agent any
-    parameters {
-        choice(
-            choices: ['greeting' , 'silence'],
-            description: '',
-            name: 'REQUESTED_ACTION')
+    
+    environment {
+        APP_NAME = 'tabular-diabetes-regressor'
+        EXPERIMENT_ID = '899851889820856353'
+        RUN_ID = 'd196fa50c0224982ab346d8d18934059'
+        NAS_NAME = 'gs://zedd-mlruns'
+        AR_NAME = 'jo181/bentoml-serving'
     }
 
     stages {
-        stage ('Speak') {
-            when {
-                // Only say hello if a "greeting" is requested
-                expression { params.REQUESTED_ACTION == 'greeting' }
-            }
+        stage('Moving serving directory') {
             steps {
-                echo "Hello, bitwiseman!"
+                sh 'cd serving && ls -l'
+            }
+            setps {
+                sh 'echo $(pwd)'
             }
         }
     }
