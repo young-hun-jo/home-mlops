@@ -13,7 +13,6 @@ pipeline {
             args '-u root'
             args '-v ${PWD}/README.md:/tmp/README.md'
             }
-        }
     }
     stages {
         stage('Authenticate') {
