@@ -19,8 +19,9 @@ pipeline {
             steps {
                 sh '''
                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
-                gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} .
-                ls -l .
+                ls -l /tmp/gcloud
+                gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} serving/${APP_NAME}/bento-ml
+                ls -l serving/${APP_NAME}/bento-ml
                 '''
                 
             }
