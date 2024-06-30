@@ -22,27 +22,3 @@ pipeline {
            '''
     }
 }
-
-
-/*
-pipeline {
-    agent any
-
-    stages {
-        stage('Run Docker in Docker') {
-            steps {
-                script {
-                    // 'google/cloud-sdk:latest' 이미지를 기반으로 컨테이너를 실행
-                    docker.image('google/cloud-sdk:latest').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-                        // 컨테이너 내부에서 Docker 명령어 실행
-                        sh '''
-                            docker --version
-                            docker run hello-world
-                        '''
-                    }
-                }
-            }
-        }
-    }
-}
-/*
