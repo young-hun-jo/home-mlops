@@ -19,7 +19,9 @@ pipeline {
             steps {
                 sh '''
                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
-                echo $APP_NAME
+                mkdir -p $APP_NAME/bento-ml
+                gsutil -m cp -r $NAS_NAME/$EXPERIMENT_ID/$RUN_ID $APP_NAME/bento-ml
+                ls -R $APP_NAME/bento-ml
                 '''
                 
             }
