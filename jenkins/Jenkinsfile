@@ -18,6 +18,8 @@ pipeline {
         stage('Authenticate') {
             steps {
                 sh 'ls -l /tmp/gcloud'
+                sh 'gcloud config configurations create zedd'
+                sh 'gcloud config configurations activate zedd'
                 sh 'gcloud auth activate-service-account --key-file=/tmp/gcloud/test-key.json'
             }
         }
