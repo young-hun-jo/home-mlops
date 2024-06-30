@@ -5,22 +5,22 @@ pipeline {
         RUN_ID = 'd196fa50c0224982ab346d8d18934059'
         NAS_NAME = 'gs://zedd-mlruns'
         AR_NAME = 'jo181/bentoml-serving'
-        CLOUDSDK_CONFIG = '/zedd'
+        CLOUDSDK_CONFIG = '/tmp'
     }
 
     agent {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-u root'
-            args '-v $SA_KEY_PATH:/zedd/gcloud/test-key.json'
+            args '-v $SA_KEY_PATH:/tmp/gcloud/test-key.json'
             }
     }
     stages {
         stage('Authenticate') {
             steps {
-                sh 'ls -R /zedd'
-                sh 'gcloud auth activate-service-account --key-file=/zedd/gcloud/test-key.json'
-                sh 'ls -R /zedd'
+                sh 'ls -R /tmp'
+                sh 'gcloud auth activate-service-account --key-file=/tmp/gcloud/test-key.json'
+                sh 'ls -R /tmp'
             }
         }
     }
