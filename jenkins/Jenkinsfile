@@ -16,7 +16,10 @@ pipeline {
     stages {
         stage('Authenticate') {
             steps {
-                sh 'gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json'
+                sh '''
+                su chomod 777 /root/.config/gcloud
+                gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
+                '''
             }
         }
     }
