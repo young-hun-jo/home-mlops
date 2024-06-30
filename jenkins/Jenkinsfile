@@ -14,11 +14,11 @@ pipeline {
             args '-v serving/tabular-diabetes-regressor/bento-ml:/serving/tabular-diabetes-regressor/bento-ml'
         }
     }
-    steps {
-        sh '''
-           gcloud auth activate-service-account --key-file=/root/.config/gcloud/application_default_credentials.json && \
-           gsutil -m cp -r gs://zedd-mlruns/899851889820856353/d196fa50c0224982ab346d8d18934059 /serving/tabular-diabetes-regressor/bento-ml && \
-           ls -R /serving/tabular-diabetes-regressor/bento-ml
-           '''
+    stages {
+        stage('Authenticate') {
+            steps {
+                sh 'gcloud auth activate-service-account --key-file=/root/.config/gcloud/application_default_credentials.json'
+            }
+        }
     }
 }
