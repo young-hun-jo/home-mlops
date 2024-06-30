@@ -11,7 +11,7 @@ pipeline {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-v $SA_KEY_PATH:/root/.config/gcloud/application_default_credentials/json'
-            args '-v serving/tabular-diabetes-regressor/bento-ml:/serving/tabular-diabetes-regressor/bento-ml'
+            args '-v $(pwd)/serving/tabular-diabetes-regressor/bento-ml:/serving/tabular-diabetes-regressor/bento-ml'
         }
     }
     stages {
