@@ -5,7 +5,7 @@ pipeline {
         RUN_ID = 'd196fa50c0224982ab346d8d18934059'
         NAS_NAME = 'gs://zedd-mlruns'
         AR_NAME = 'jo181/bentoml-serving'
-        CLOUDSDK_CONFIG = '/tmp/gcloud'
+        CLOUDSDK_CONFIG = '/tmp'
     }
 
     agent {
