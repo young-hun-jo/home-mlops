@@ -10,14 +10,14 @@ pipeline {
     agent {
         docker {
             image 'google/cloud-sdk:alpine'
-            args '-v $SA_KEY_PATH:/tmp/gcloud/application_default_credentials.json'
+            args '-v $SA_KEY_PATH:/tmp/application_default_credentials.json'
             args '-u root'
         }
     }
     stages {
         stage('Authenticate') {
             steps {
-                sh 'ls -l /tmp/gcloud'
+                sh 'ls -l /tmp'
             }
         }
     }
