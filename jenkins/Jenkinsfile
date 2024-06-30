@@ -11,14 +11,14 @@ pipeline {
     agent {
         docker {
             image 'google/cloud-sdk:alpine'
-            args '-v $SA_KEY_PATH:/tmp/gcloud/application_default_credentials.json'
+            args '-v $SA_KEY_PATH:/tmp/application_default_credentials.json'
             }
     }
     stages {
         stage('Authenticate') {
             steps {
                 sh '''
-                gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
+                gcloud auth activate-service-account --key-file=/tmp/application_default_credentials.json
                 gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} serving/${APP_NAME}/bento-ml
                 ls -l serving/${APP_NAME}/bento-ml
                 '''
