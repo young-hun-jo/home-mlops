@@ -18,7 +18,7 @@ pipeline {
         stage('Authenticate') {
             steps {
                 sh 'ls -l /tmp/gcloud'
-                sh 'echo $SA_KEY_PATH'
+                sh 'gcloud auth activate-service-account --key-file=/tmp/gcloud/test-key.json'
             }
         }
     }
