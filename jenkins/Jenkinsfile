@@ -11,7 +11,7 @@ pipeline {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-u root'
-            args '-v ${PWD}/README.md:/tmp/README.md'
+            args '-v /Users/zedd.ai/.jenkins/workspace/tutorials-zedd_jenkins_dev/README.md:/tmp/README.md'
             }
     }
     stages {
