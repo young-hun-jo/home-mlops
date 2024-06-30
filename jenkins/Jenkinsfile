@@ -11,12 +11,7 @@ pipeline {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-u root'
-            volumes {
-                hostPath {
-                    path '${SA_KEY_PATH}'
-                    type 'File'
-                mountPath '/tmp/application_default_credentials.json'
-                }
+            args '-v ${PWD}/README.md:/tmp/README.md'
             }
         }
     }
