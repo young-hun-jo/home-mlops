@@ -20,7 +20,7 @@ pipeline {
                 sh '''
                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
                 mkdir -p $APP_NAME/bento-ml
-                ls -R $APP_NAME/bento-ml
+                ls -l
                 '''
                 
             }
