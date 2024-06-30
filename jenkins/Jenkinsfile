@@ -5,7 +5,6 @@ pipeline {
         RUN_ID = 'd196fa50c0224982ab346d8d18934059'
         NAS_NAME = 'gs://zedd-mlruns'
         AR_NAME = 'jo181/bentoml-serving'
-        SA_KEY_PATH='/Users/zedd.ai/test-key.json'
     }
 
     agent {
@@ -19,6 +18,7 @@ pipeline {
         stage('Authenticate') {
             steps {
                 sh 'ls -l /tmp'
+                sh 'echo $SA_KEY_PATH'
             }
         }
     }
