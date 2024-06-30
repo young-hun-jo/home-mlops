@@ -12,6 +12,7 @@ pipeline {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-v $SA_KEY_PATH:/tmp/gcloud/application_default_credentials.json'
+            args '-v $GSUTIL_DIR:/root/.gsutil'
             }
     }
     stages {
