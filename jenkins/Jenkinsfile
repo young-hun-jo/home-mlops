@@ -1,6 +1,4 @@
 pipeline {
-    agent any
-    
     environment {
         APP_NAME = 'tabular-diabetes-regressor'
         EXPERIMENT_ID = '899851889820856353'
@@ -9,11 +7,42 @@ pipeline {
         AR_NAME = 'jo181/bentoml-serving'
     }
 
+    agent {
+        docker {
+            image 'google/cloud-sdk:alpine'
+            args '-v $SA_KEY_PATH:/root/.config/gcloud/application_default_credentials/json'
+            args '-v serving/tabular-diabetes-regressor/bento-ml:/serving/tabular-diabetes-regressor/bento-ml'
+        }
+    }
+    steps {
+        sh '''
+           gcloud auth activate-service-account --key-file=/root/.config/gcloud/application_default_credentials.json && \
+           gsutil -m cp -r gs://zedd-mlruns/899851889820856353/d196fa50c0224982ab346d8d18934059 /serving/tabular-diabetes-regressor/bento-ml && \
+           ls -R /serving/tabular-diabetes-regressor/bento-ml
+           '''
+    }
+}
+
+
+/*
+pipeline {
+    agent any
+
     stages {
-        stage('check docker.sock') {
+        stage('Run Docker in Docker') {
             steps {
-                sh 'ls -l /var/run'
+                script {
+                    // 'google/cloud-sdk:latest' 이미지를 기반으로 컨테이너를 실행
+                    docker.image('google/cloud-sdk:latest').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                        // 컨테이너 내부에서 Docker 명령어 실행
+                        sh '''
+                            docker --version
+                            docker run hello-world
+                        '''
+                    }
+                }
             }
         }
     }
 }
+/*
