@@ -18,10 +18,9 @@ pipeline {
         stage('Authenticate') {
             steps {
                 sh '''
-                chmod 777 /tmp/gcloud/application_default_credentials.json
                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
-                ls -l /tmp/gcloud
-                gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} serving/${APP_NAME}/bento-ml
+                mkdir -p serving/jenkins-test
+                cp /tmp/gcloud/application_default_credentials.json serving/jenkins-test
                 ls -l serving/${APP_NAME}/bento-ml
                 '''
                 
