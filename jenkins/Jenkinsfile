@@ -18,7 +18,7 @@ pipeline {
         stage('Authenticate') {
             steps {
                 sh '''
-                echo $HOME
+                echo $(pwd)
                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
                 gsutil -D cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} jenkins-test-dir
                 ls -l jenkins-test-dir
