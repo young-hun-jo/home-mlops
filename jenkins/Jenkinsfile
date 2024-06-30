@@ -5,13 +5,14 @@ pipeline {
         RUN_ID = 'd196fa50c0224982ab346d8d18934059'
         NAS_NAME = 'gs://zedd-mlruns'
         AR_NAME = 'jo181/bentoml-serving'
+        SA_KEY_PATH='/Users/zedd.ai/test-key.json'
     }
 
     agent {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-u root'
-            args '-v /Users/zedd.ai/.jenkins/workspace/tutorials-zedd_jenkins_dev/test-key.json:/tmp/test-key.json'
+            args '-v ${SA_KEY_PATH}:/tmp/test-key.json'
             }
     }
     stages {
