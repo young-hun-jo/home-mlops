@@ -16,10 +16,7 @@ pipeline {
     stages {
         stage('Authenticate') {
             steps {
-                sh '''
-                whoami
-                gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
-                '''
+                sh 'whoami'
             }
         }
     }
