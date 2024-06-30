@@ -18,8 +18,7 @@ pipeline {
     stages {
         stage('Authenticate') {
             steps {
-                sh 'ls -l /tmp/gcloud'
-                echo '$CLOUDSDK_CONFIG'
+                sh 'ls -R /tmp'
                 sh 'gcloud auth activate-service-account --key-file=/tmp/gcloud/test-key.json'
                 sh 'ls -R /tmp'
             }
