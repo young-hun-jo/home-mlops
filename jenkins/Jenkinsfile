@@ -19,8 +19,7 @@ pipeline {
             steps {
                 sh '''
                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
-                mkdir -p serving/jenkins-test
-                cp /tmp/gcloud/application_default_credentials.json serving/jenkins-test
+                gsutil cp -r gs://zedd-mlruns/899851889820856353/d196fa50c0224982ab346d8d18934059 serving/${APP_NAME}/bento-ml
                 ls -l serving/${APP_NAME}/bento-ml
                 '''
                 
