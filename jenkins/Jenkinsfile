@@ -17,7 +17,7 @@ pipeline {
         stage('Authenticate') {
             steps {
                 sh '''
-                su chomod 777 /root/.config/gcloud
+                whoami
                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
                 '''
             }
