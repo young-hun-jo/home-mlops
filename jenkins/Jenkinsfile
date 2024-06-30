@@ -14,6 +14,12 @@ pipeline {
         }
     }
     stages {
+        stage('Check SA_KEY') {
+            steps {
+                sh 'echo $SA_KEY_PATH'
+            }
+        }
+
         stage('Authenticate') {
             steps {
                 sh 'gcloud auth activate-service-account --key-file=/root/.config/gcloud/application_default_credentials.json'
