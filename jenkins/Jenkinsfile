@@ -10,19 +10,13 @@ pipeline {
     agent {
         docker {
             image 'google/cloud-sdk:alpine'
-            args '-v $SA_KEY_PATH:/root/.config/gcloud/application_default_credentials/json'
+            args '-v $SA_KEY_PATH:/zedd/gcloud/application_default_credentials/json'
         }
     }
     stages {
-        stage('Check SA_KEY') {
-            steps {
-                sh 'echo $SA_KEY_PATH'
-            }
-        }
-
         stage('Authenticate') {
             steps {
-                sh 'gcloud auth activate-service-account --key-file=/root/.config/gcloud/application_default_credentials.json'
+                sh 'gcloud auth activate-service-account --key-file=/zedd/gcloud/application_default_credentials.json'
             }
         }
     }
