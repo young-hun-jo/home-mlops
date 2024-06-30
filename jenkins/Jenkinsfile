@@ -11,13 +11,13 @@ pipeline {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-u root'
-            args '-v $SA_KEY_PATH:/tmp/test-key.json'
+            args '-v $SA_KEY_PATH:/tmp/gcloud/test-key.json'
             }
     }
     stages {
         stage('Authenticate') {
             steps {
-                sh 'ls -l /tmp'
+                sh 'ls -l /tmp/gcloud'
                 sh 'echo $SA_KEY_PATH'
             }
         }
