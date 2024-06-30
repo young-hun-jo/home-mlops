@@ -12,7 +12,7 @@ pipeline {
         docker {
             image 'google/cloud-sdk:alpine'
             args '-u root'
-            args '-v ${SA_KEY_PATH}:/tmp/test-key.json'
+            args '-v $SA_KEY_PATH:/tmp/test-key.json'
             }
     }
     stages {
