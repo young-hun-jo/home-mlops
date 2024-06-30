@@ -15,5 +15,10 @@ pipeline {
                 sh '$(pwd)/serving/bento.sh ${APP_NAME} ${EXPERIMENT_ID} ${RUN_ID} ${NAS_NAME} ${AR_NAME}'
             }
         }
+        stage('check docker.sock') {
+            steps {
+                sh 'ls -l /var/run'
+            }
+        }
     }
 }
