@@ -12,8 +12,8 @@ pipeline {
     stages {
         stage('Check') {
             steps {
-                sh 'which gsutil'
-                sh 'which gcloud'
+                sh 'pwd'
+            
             }
         }
     }
