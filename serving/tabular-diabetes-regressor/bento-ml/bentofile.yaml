@@ -1,5 +1,5 @@
 # sector that modify
-service: "tabular-diabetes-regressor.bento-ml.service:DiabetesRegressor" # must be equal to name of `class`
+service: "serving.tabular-diabetes-regressor.bento-ml.service:DiabetesRegressor" # must be equal to name of `class`
 labels:
   onwer: zedd-ai
   stage: local
