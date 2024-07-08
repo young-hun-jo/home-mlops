@@ -12,7 +12,8 @@ pipeline {
     stages {
         stage('Check') {
             steps {
-                sh 'cd serving/${APP_NAME}/bento-ml && ls -l'
+                sh 'gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} serving/${APP_NAME}/bento-ml'
+                sh 'ls -l serving/${APP_NAME}/bento-ml'
             
             }
         }
