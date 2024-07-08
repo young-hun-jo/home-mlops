@@ -15,7 +15,7 @@ pipeline {
                 sh '''
                 export APP_DIR=serving/${APP_NAME}/bento-ml
                 gcloud auth activate-service-account --key-file=${SA_KEY_PATH}
-                gsutil -m cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} ${APP_DIR}
+                gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} ${APP_DIR}
                 ls -l ${APP_DIR}
                 '''
             }
