@@ -10,18 +10,20 @@ pipeline {
 
     agent any
     stages {
-        stage('Check') {
+        stage('Download from GCS') {
             steps {
                 sh '''
                 export APP_DIR=serving/${APP_NAME}/bento-ml
                 gcloud auth activate-service-account --key-file=${SA_KEY_PATH}
-                gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} ${APP_DIR}
+                gsutil -m cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} ${APP_DIR}
                 ls -l ${APP_DIR}
                 '''
-                // sh 'gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} serving/${APP_NAME}/bento-ml'
-                sh 'ls -l serving/${APP_NAME}/bento-ml'
-            
             }
+        stage('Check') {
+            steps {
+                sh 'ls -l serving/${APP_NAME}/bento-ml'
+            }
+        }
         }
     }
 }
