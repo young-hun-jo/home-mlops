@@ -19,13 +19,13 @@ pipeline {
                 ls -l ${APP_DIR}
                 '''
             }
+        }
         stage('Check') {
             steps {
                 sh 'ls -l serving/${APP_NAME}/bento-ml'
             }
         }
         }
-    }
 }
 
 // pipeline {
