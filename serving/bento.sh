@@ -72,7 +72,7 @@ updatePkgOfBentofileYaml $requirements_path $bentofile_path && \
 bentoml build -f $bentofile_path && \
 # conatinerize bento to docker image
 bentoml containerize $BENTOML_SVC_NAME:latest
-bentoml list $BENTOML_SVC_NAME | sort -r -k 4 | sed -n 2p | awk '{print $1}'
+bentoml list # $BENTOML_SVC_NAME | sort -r -k 4 | sed -n 2p | awk '{print $1}'
 bentoml_img_tag=$(bentoml list $BENTOML_SVC_NAME | sort -r -k 4 | sed -n 2p | awk '{print $1}') && echo $LOGGER BENTOML_TAG_NAME: $bentoml_img_tag && \
 # rename tagname of docker image for pushing to docker hub registry
 rename_img_tag=$(echo $AR_NAME:$(echo $bentoml_img_tag | sed 's/:/-/')) && echo $LOGGER BENTOML_IMAGE_NAME: $rename_img_tag && \
