@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Check') {
             steps {
-                sh 'pwd'
+                sh 'pwd && ls -l'
             
             }
         }
