@@ -12,7 +12,9 @@ pipeline {
     stages {
         stage('Check') {
             steps {
-                sh 'echo ${SA_KEY_PATH}'
+                sh '''
+                gcloud auth activate-service-account --key-file=${SA_KEY_PATH}
+                '''
                 // sh 'gsutil cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} serving/${APP_NAME}/bento-ml'
                 sh 'ls -l serving/${APP_NAME}/bento-ml'
             
