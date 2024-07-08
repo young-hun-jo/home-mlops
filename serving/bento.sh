@@ -5,17 +5,13 @@ LOGGER=$(date '+%Y-%m-%d %H:%M:%S')
 export APP_NAME="$1"
 export MLFLOW_EXPERIMENT_ID="$2"
 export MLFLOW_RUN_ID="$3"
-export NAS_NAME="$4"
-export AR_NAME="$5"
+export AR_NAME="$4"
 
 # envs
 export ROOT_DIR=$(git rev-parse --show-toplevel)
 export BENTO_APP_DIR=$ROOT_DIR/serving/$APP_NAME/bento-ml
 export BENTOML_MODEL_NAME=$APP_NAME-bento-model
 export BENTOML_SVC_NAME=$APP_NAME-bento-svc
-
-# download artifacts from NAS
-gsutil -m cp -r $NAS_NAME/$MLFLOW_EXPERIMENT_ID/$MLFLOW_RUN_ID $BENTO_APP_DIR
 
 export MODEL_NAME=$(ls $BENTO_APP_DIR/$MLFLOW_RUN_ID/artifacts/)
 export MODEL_URI=$BENTO_APP_DIR/$MLFLOW_RUN_ID/artifacts/$MODEL_NAME
