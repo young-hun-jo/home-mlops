@@ -9,23 +9,46 @@ pipeline {
     }
 
     agent {
-        docker {
-            image 'google/cloud-sdk:alpine'
-            args '-v $SA_KEY_PATH:/tmp/gcloud/application_default_credentials.json'
-            }
+        any
     }
     stages {
-        stage('Authenticate') {
+        stage('Check') {
             steps {
-                sh '''
-                echo $(pwd)
-                export CLOUDSDK_CONFIG=/tmp
-                gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
-                gsutil -D cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} jenkins-test-dir
-                ls -l jenkins-test-dir
-                '''
-                
+                sh 'which gsutil'
+                sh 'which gcloud'
             }
         }
     }
 }
+
+// pipeline {
+//     environment {
+//         APP_NAME = 'tabular-diabetes-regressor'
+//         EXPERIMENT_ID = '899851889820856353'
+//         RUN_ID = 'd196fa50c0224982ab346d8d18934059'
+//         NAS_NAME = 'gs://zedd-mlruns'
+//         AR_NAME = 'jo181/bentoml-serving'
+//         CLOUDSDK_CONFIG = '/tmp'
+//     }
+
+//     agent {
+//         docker {
+//             image 'google/cloud-sdk:alpine'
+//             args '-v $SA_KEY_PATH:/tmp/gcloud/application_default_credentials.json'
+//             }
+//     }
+//     stages {
+//         stage('Authenticate') {
+//             steps {
+//                 sh '''
+//                 echo $(pwd)
+//                 export CLOUDSDK_CONFIG=/tmp
+//                 gcloud auth activate-service-account --key-file=/tmp/gcloud/application_default_credentials.json
+//                 gsutil -D cp -r ${NAS_NAME}/${EXPERIMENT_ID}/${RUN_ID} jenkins-test-dir
+//                 ls -l jenkins-test-dir
+//                 '''
+                
+//             }
+//         }
+//     }
+// }
