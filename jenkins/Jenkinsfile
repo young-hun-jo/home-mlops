@@ -8,9 +8,7 @@ pipeline {
         CLOUDSDK_CONFIG = '/tmp'
     }
 
-    agent {
-        any
-    }
+    agent any
     stages {
         stage('Check') {
             steps {
