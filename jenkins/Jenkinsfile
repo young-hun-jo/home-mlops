@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Check') {
             steps {
-                sh 'pwd && ls -l'
+                sh 'cd serving/${APP_NAME}/bento-ml && ls -l'
             
             }
         }
