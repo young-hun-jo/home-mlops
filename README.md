@@ -2,13 +2,14 @@
 Building my own open-source MLOps from scratch
 
 - 나홀로 집에서 구축하는 Home MLOps 시스템은 다음의 환경에 따라 실행 방법이 상이함
-    - dev: 로컬 환경
-    - prod: 운영 환경
+    - localhost 개발 환경
+    - k8s 운영 환경
 
-## 1. dev
-dev 에서의 애플리케이션 아키텍처 구조는 다음과 같
+## 1. localhost
+localhost 에서의 애플리케이션 아키텍처 구조는 다음과 같음
 
-![스크린샷 2024-06-02 오후 5 22 12](https://github.com/young-hun-jo/home-mlops/assets/54783194/32536039-ab68-4f1f-8c11-e7b329521cd7)
+![스크린샷 2024-07-12 오전 12 04 11](https://github.com/young-hun-jo/home-mlops/assets/54783194/f289e2c3-04c5-40c8-907a-48b9505ba6b2)
+
 
 ### 1-2. Tutorials
 #### Step00: Introduction 
