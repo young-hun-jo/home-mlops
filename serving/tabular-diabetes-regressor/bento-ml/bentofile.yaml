@@ -1,5 +1,5 @@
 # sector that modify
-service: "service:DiabetesRegressor"  # must be equal to name of `class`
+service: "serving.tabular-diabetes-regressor.bento-ml.service:DiabetesRegressor" # must be equal to name of `class`
 labels:
   onwer: zedd-ai
   stage: local
@@ -7,9 +7,14 @@ include:
   - "service.py"
 python:
   packages:
-    - mlflow # necessarily install for using mlflow-trained model in bento-ml serving
-    - scikit-learn
-    - numpy
+    - mlflow==2.12.2
+    - cloudpickle==3.0.0
+    - numpy==1.26.4
+    - packaging==24.0
+    - psutil==5.9.8
+    - pyyaml==6.0.1
+    - scikit-learn==1.4.2
+    - scipy==1.13.0
 # sector that don't need to modify
 models:
-  - tabular-diabetes-regressor-v2-bento-model:latest
+  - tabular-diabetes-regressor-bento-model:latest
