@@ -88,7 +88,7 @@ python train.py
 
 ![스크린샷 2024-07-12 오전 10 03 08](https://github.com/user-attachments/assets/11998414-071b-499d-847e-c09c5870d87b)
 
-- Jenkins UI에는 각 Application 마다 BentoML 혹은 FastAPI 모두 또는 둘 중 하나의 Pipeline Job이 존재
+- Jenkins UI에는 각 Application 마다 BentoML 과 FastAPI 모두 또는 둘 중 하나의 Pipeline Job이 존재
 - (그림 첨부 예정..)
 
 #### 1-5-1. Build BentoML 
