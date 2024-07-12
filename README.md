@@ -11,8 +11,7 @@ localhost 에서의 애플리케이션 아키텍처 구조는 다음과 같음
 ![스크린샷 2024-07-12 오전 12 04 11](https://github.com/young-hun-jo/home-mlops/assets/54783194/f289e2c3-04c5-40c8-907a-48b9505ba6b2)
 
 
-### 1-2. Tutorials
-#### Step00: Introduction 
+### 1-1. Step00: Introduction
 - clone github repository
 ```bash
 git clone https://github.com/young-hun-jo/home-mlops.git
@@ -29,7 +28,7 @@ home-mlops
 ┃ ┃ ┣ bento-ml
 ┃ ┃ ┣ fast-api
 ┣ training
-┃ ┣ mlruns       # directory archiving artifacts and metadata for trained model in MLflow
+┃ ┣ mlruns         # directory archiving metadata of trained model in MLflow
 ┃ ┣ $APP_NAME_1
 ┃ ┃ ┣ train.py
 ┃ ┣ $APP_NAME_2
@@ -40,30 +39,70 @@ home-mlops
 ```bash
 pip install -e home-mlops/common
 ```
-- 학습된 모델에 대한 다양한 artifacts, metadata를 트래킹할 수 있는 MLflow UI 서버를 컨테이너 형태로 배포
+
+### 1-2. Step01: Deploy MLflow, Jenkins Server
+#### 1-2-1. MLflow Server
+- 학습된 모델에 대한 다양한 artifacts, metadata를 트래킹할 수 있는 MLflow UI 서버를 로컬에서 배포
+- artifacts는 중앙화된 스토리지인 클라우드 스토리지에 저장하므로 스토리지 경로를 포함하여 아래 스크립트를 실행
+  - 예시에서는 GCS를 사용
 ```bash
-home-mlops/training/deploy.sh
+export CUSTOM_DEFAULT_ARTIFACT_ROOT_URI=gs://home-mlops-storage
+training/mlflow-ui.sh $CUSTOM_DEFAULT_ARTIFACT_ROOT_URI
 ```
-- Container Registry Repository 2개를 생성
-    - ex) Docker-hub, Github Container Registry, Google Cloud Artifact Registry, ...
-    - BentoML Serving 용 1개
-    - FastAPI Serving 용 1개
-    - <a href='https://hub.docker.com/repositories/jo181'>example registry</a>
 
-#### Step01: Training
+#### 1-2-2. Jenkins Server 
+- Serving 단계에서 빌드, 배포 과정을 CI/CD할 Jenkins 서버를 로컬에서 배포 
+- MacOS 기준
+```bash
+brew services start jenkins-lts
+```
+
+### 1-3. Step02: Artifact Registry
+- Serving 시 사용할 이미지를 빌드하고 저장하기 위해 Remote Artifact Registry가 필요
+- Docker Hub를 사용
+- 2개의 Repository를 생성
+  - BentoML 이미지 용(<a href='https://hub.docker.com/repository/docker/jo181/bentoml-serving/general'>ex</a>)
+  - FastAPI 이미지 용(<a href='https://hub.docker.com/repository/docker/jo181/fastapi-serving/general'>ex</a>)
+
+### 1-4. Step03: Training
 - 오픈소스 모델을 사용해서 학습시키되 반드시 스크립트에 `set_mlflow_backend_store_uri` 함수를 initialize 시켜주기
+- 그래야 Remote Storage에 학습 모델의 artifacts 업로드 됨
 ```python
-from home.utils import set_mlflow_backend_store_uri
-
+# train.py
 import mlflow
+from home.utils import set_mlflow_backend_store_uri
 
 # necessarily initialize !
 set_mlflow_backend_store_uri()
 
-
 ...(train source code)...
 ```
+- 학습소스 코드 작성 후, 학습 스크립트 실행
+```bash
+python train.py
+```
 
+### 1-5. Step04: Serving
+- Serving 소스코드를 사용자가 직접 작성하고 Jenkins UI에서 트리거 수행
+- 전체적인 과정은 아래의 순서를 따름 
+
+![스크린샷 2024-07-12 오전 10 03 08](https://github.com/user-attachments/assets/11998414-071b-499d-847e-c09c5870d87b)
+
+- Jenkins UI에는 각 Application 마다 BentoML 혹은 FastAPI 모두 또는 둘 중 하나의 Pipeline Job이 존재
+- (그림 첨부 예정..)
+
+#### 1-5-1. Build BentoML 
+- UI 에서 총 5가지의 파라미터를 지정
+  - Application Name : 목차 [1-1]에서 소개한 프로젝트 구조에서 $APP_NAME에 해당하는 디렉토리 이름
+  - Experiment Id : 학습 후 MLflow에 등록된 experiment id
+  - Run Id : 학습 후 MLflow에 등록된 run id
+  - NAS Name : Remote Storage(GCS, S3, ..) 경로
+  - Artifact Registry Name : Docker Hub에서 생성한 BentoML 용 레포지토리 경로
+- (현재 작업 진행 중..)
+
+---
+---
+# 🗑️ Archiving existing README 
 #### Step02: Build Serving(1) - BentoML
 - 4가지 파일이 필요
 ```
@@ -126,7 +165,7 @@ docker-compose up -d
 http://localhost:8000
 ```
 
-
+---
 ## 🔗 Referecne
 
 - mlflow 실행하면서 생성되는 `mlruns` 디렉토리 구조
