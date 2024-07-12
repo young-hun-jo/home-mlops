@@ -104,7 +104,8 @@ python train.py
 ## 2. k8s 운영 환경(예정)
 - 미니 PC 총 3대로 k8s 홈 클러스터러 구축
 - 아래의 미니 PC는 master 노드로 사용하기 위해 구입
-
+    - 스펙: CPU N100(4core) | RAM 16G | SSD 512G
+ 
 ![KakaoTalk_Photo_2024-07-12-20-06-00 (3)](https://github.com/user-attachments/assets/b260601e-c552-46f0-b62a-f3dcfa708288)
 
 
