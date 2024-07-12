@@ -4,6 +4,7 @@ Building my own open-source MLOps from scratch
 - 나홀로 집에서 구축하는 Home MLOps 시스템은 다음의 환경에 따라 실행 방법이 상이함
     - localhost 개발 환경
     - k8s 운영 환경
+## 0. Stack
 
 ## 1. localhost
 localhost 에서의 애플리케이션 아키텍처 구조는 다음과 같음
@@ -99,6 +100,15 @@ python train.py
   - NAS Name : Remote Storage(GCS, S3, ..) 경로
   - Artifact Registry Name : Docker Hub에서 생성한 BentoML 용 레포지토리 경로
 - (현재 작업 진행 중..)
+
+## 2. k8s 운영 환경(예정)
+- 미니 PC 총 3대로 k8s 홈 클러스터러 구축
+- 아래의 미니 PC는 master 노드로 사용하기 위해 구입
+
+![KakaoTalk_Photo_2024-07-12-20-06-00 (3)](https://github.com/user-attachments/assets/b260601e-c552-46f0-b62a-f3dcfa708288)
+
+
+- worker 노드를 위한 미니 PC 2대는 추후에 구매할 예정
 
 ---
 ---
