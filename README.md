@@ -109,7 +109,7 @@ python train.py
 ![KakaoTalk_Photo_2024-07-12-20-06-00 (3)](https://github.com/user-attachments/assets/b260601e-c552-46f0-b62a-f3dcfa708288)
 
 
-- worker 노드를 위한 미니 PC 2대는 추후에 구매할 예정
+- worker 노드를 위한 미니 PC 2대는 master 노드용 PC에 k8s 설치 및 클러스터 구성이 잘 완료된 뒤 추후에 구매할 예정
 
 ---
 ---
