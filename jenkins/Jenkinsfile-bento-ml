@@ -13,7 +13,7 @@ pipeline {
         stage('Verbose parameters') {
             steps {
                 sh """
-                export TEMP="Hello zedd"
+                export TEMP='Hello zedd'
                 echo Params: {$APP_NAME}"
                 """
             }
