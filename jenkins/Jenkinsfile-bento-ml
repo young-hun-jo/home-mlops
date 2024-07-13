@@ -12,26 +12,22 @@ pipeline {
     stages {
         stage('Verbose parameters') {
             steps {
+                echo "Params: $params.APP_NAME, $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME"
+            }
+        }
+        stage('Download from GCS') {
+            steps {
                 sh """
-                export TEMP="Hello zedd"
-                echo Params: $params.APP_NAME, $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME, $TEMP"
+                gcloud auth activate-service-account --key-file=$SA_KEY_PATH
+                gsutil cp -r $params.NAS_NAME/$params.EXPERIMENT_ID/$params.RUN_ID serving/$params.APP_NAME/bento-ml
+                ls -l serving/$params.APP_NAME/bento-ml
                 """
             }
         }
-        // stage('Download from GCS') {
-        //     steps {
-        //         sh """
-        //         export APP_DIR=serving/$params.APP_NAME/bento-ml
-        //         gcloud auth activate-service-account --key-file=$SA_KEY_PATH
-        //         gsutil cp -r $params.NAS_NAME/$params.EXPERIMENT_ID/$params.RUN_ID $APP_DIR
-        //         ls -l $APP_DIR
-        //         """
-        //     }
-        // }
-        // stage('Build Bento') {
-        //     steps {
-        //         sh "./serving/bento.sh $params.APP_NAME $params.EXPERIMENT_ID $params.RUN_ID $params.AR_NAME"
-        //     }
-        // }
+        stage('Build Bento') {
+            steps {
+                sh "./serving/bento.sh $params.APP_NAME $params.EXPERIMENT_ID $params.RUN_ID $params.AR_NAME"
+            }
+        }
     }
 }
