@@ -7,7 +7,11 @@ pipeline {
         AR_NAME = 'jo181/bentoml-serving'
     }
     parameters {
-        string(name: "TEST_STRING", defaultValue: "zedd-test", description: "test-string")
+        string(name: "APP_NAME", defaultValue: "tabular-diabetes-regressor", description: "bento application name")
+        string(name: "EXPERIMENT_ID", defaultValue: "899851889820856353", description: "mlflow experiment id")
+        string(name: "RUN_ID", defaultValue: "d196fa50c0224982ab346d8d18934059", description: "mlflow run id")
+        string(name: "NAS_NAME", defaultValue: "gs://zedd-mlruns", description: "remote network storage path")
+        choice(name: "AR_NAME", choices: ["jo181/bentoml-serving"], description: "repository of image registry")
     }
 
     agent any
@@ -15,7 +19,7 @@ pipeline {
     stages {
         stage('Check params') {
             steps {
-                echo "Hello, $params.TEST_STRING"
+                echo "Hello, $params.APP_NAME, $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME"
             }
         }
         // stage('Download from GCS') {
