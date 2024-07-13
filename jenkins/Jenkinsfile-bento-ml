@@ -17,6 +17,7 @@ pipeline {
         }
         stage('Download from GCS') {
             steps {
+                echo "$params.APP_NAME"
                 sh '''
                 export APP_DIR=serving/$params.APP_NAME/bento-ml
                 gcloud auth activate-service-account --key-file=${SA_KEY_PATH}
