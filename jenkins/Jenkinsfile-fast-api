@@ -1,0 +1,11 @@
+pipline {
+    agent any
+
+    stages {
+        stage('make random value') {
+            steps {
+                sh 'openssl rand -bas64 12'
+            }
+        }
+    }
+}
