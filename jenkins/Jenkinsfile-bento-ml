@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Verbose parameters') {
             steps {
-                echo "Params: $params.APP_NAME $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME"
+                echo "Params: $params.APP_NAME $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME ${SA_KEY_PATH}"
             }
         }
         // stage('Download from GCS') {
