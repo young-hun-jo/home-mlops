@@ -14,7 +14,7 @@ pipeline {
             steps {
                 sh """
                 export TEMP="Hello zedd"
-                echo Params: {$APP_NAME}, $TEMP"
+                echo Params: {$APP_NAME}"
                 """
             }
         }
