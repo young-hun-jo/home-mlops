@@ -4,6 +4,7 @@ Building my own open-source MLOps from scratch
 - 나홀로 집에서 구축하는 Home MLOps 시스템은 다음의 환경에 따라 실행 방법이 상이함
     - localhost 개발 환경
     - k8s 운영 환경
+## 0. Stack
 
 ## 1. localhost
 localhost 에서의 애플리케이션 아키텍처 구조는 다음과 같음
@@ -88,7 +89,7 @@ python train.py
 
 ![스크린샷 2024-07-12 오전 10 03 08](https://github.com/user-attachments/assets/11998414-071b-499d-847e-c09c5870d87b)
 
-- Jenkins UI에는 각 Application 마다 BentoML 혹은 FastAPI 모두 또는 둘 중 하나의 Pipeline Job이 존재
+- Jenkins UI에는 각 Application 마다 BentoML 과 FastAPI 모두 또는 둘 중 하나의 Pipeline Job이 존재
 - (그림 첨부 예정..)
 
 #### 1-5-1. Build BentoML 
@@ -99,6 +100,16 @@ python train.py
   - NAS Name : Remote Storage(GCS, S3, ..) 경로
   - Artifact Registry Name : Docker Hub에서 생성한 BentoML 용 레포지토리 경로
 - (현재 작업 진행 중..)
+
+## 2. k8s 운영 환경(예정)
+- 미니 PC 총 3대로 k8s 홈 클러스터 구축 예정
+- 아래의 미니 PC는 master 노드로 사용하기 위해 구입
+    - 스펙: CPU N100(4core) | RAM 16G | SSD 512G
+ 
+![KakaoTalk_Photo_2024-07-12-20-06-00 (3)](https://github.com/user-attachments/assets/b260601e-c552-46f0-b62a-f3dcfa708288)
+
+
+- worker 노드를 위한 미니 PC 2대는 master 노드용 PC에 k8s 설치 및 클러스터 구성이 잘 완료된 뒤 추후에 구매할 예정
 
 ---
 ---
