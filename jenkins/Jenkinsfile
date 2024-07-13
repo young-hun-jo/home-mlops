@@ -12,7 +12,8 @@ pipeline {
     stages {
         stage('bentoml list check') {
             steps {
-                sh 'bentoml list -o table'
+                sh 'echo $APP_NAME-bento-svc'
+                echo 'Hello world'
             }
         }
         // stage('Download from GCS') {
