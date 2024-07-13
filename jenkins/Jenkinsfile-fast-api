@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('make random value') {
             steps {
-                sh 'which openssl'
+                sh 'pwd && ls -l
             }
         }
     }
