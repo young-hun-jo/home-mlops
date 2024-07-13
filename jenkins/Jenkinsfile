@@ -13,7 +13,7 @@ pipeline {
         stage('bentoml list check') {
             steps {
                 sh 'echo $APP_NAME-bento-svc'
-                sh 'tmp=$(cat < $HOME/bentoml/bentos/$APP_NAME-bento-svc/latest);echo $tmp'
+                sh 'tmp=$APP_NAME-bento-svc$(cat < $HOME/bentoml/bentos/$APP_NAME-bento-svc/latest);echo $tmp'
             }
         }
         // stage('Download from GCS') {
