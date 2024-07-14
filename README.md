@@ -99,7 +99,13 @@ python train.py
   - Run Id : 학습 후 MLflow에 등록된 run id
   - NAS Name : Remote Storage(GCS, S3, ..) 경로
   - Artifact Registry Name : Docker Hub에서 생성한 BentoML 용 레포지토리 경로
-- (현재 작업 진행 중..)
+- Jenkins UI 빌드 트리거 수행 예시
+
+![스크린샷 2024-07-14 오후 10 27 16](https://github.com/user-attachments/assets/e7193a9f-1b82-4eda-a17f-00eddbe77cb4)
+
+#### 1-5-2. Build FastAPI
+- (작업 진행 중..)
+
 
 ## 2. k8s 운영 환경(예정)
 - 미니 PC 총 3대로 k8s 홈 클러스터 구축 예정
