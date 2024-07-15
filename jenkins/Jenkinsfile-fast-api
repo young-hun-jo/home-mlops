@@ -4,18 +4,13 @@ pipeline {
         choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
     }
 
-    environment {
-        HASH_TAG = "zedd"
-    }
-
     agent any
 
     stages {
         stage('TEST') {
             steps {
                 script {
-                    def HASH = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
-                    env.HASH_TAG = HASH
+                    env.HASH_TAG = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
                 }
             }
         }
