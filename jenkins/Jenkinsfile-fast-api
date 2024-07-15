@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Check') {
             steps {
-                echo "HASH_TAG: ${HASH_TAG}"
+                echo "HASH_TAG: ${env.HASH_TAG}"
             }
         }
         // stage('Verbose parameters') {
