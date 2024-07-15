@@ -26,7 +26,10 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo "Hello Deploy"
+                sh """
+                docker run -d --name $params.APP_NAME-fastapi-svc -p 8000:8000 \
+                $params.AR_NAME:$params.APP_NAME-fastapi-svc-${env.HASH_TAG}
+                """
             }
         }
     }
