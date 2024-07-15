@@ -14,7 +14,7 @@ pipeline {
         stage('TEST') {
             steps {
                 script {
-                    env.HASH_RAG = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
+                    env.HASH_TAG = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
                     // env.HASH_TAG = sh "openssl rand -base64 12"
                 }
             }
