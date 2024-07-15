@@ -14,25 +14,20 @@ pipeline {
                 }
             }
         }
-        stage('Check') {
-            steps {
-                echo "HASH_TAG: ${env.HASH_TAG}"
-            }
-        }
         stage('Verbose parameters') {
             steps {
                 echo "Params: $params.APP_NAME $params.AR_NAME ${env.HASH_TAG}"
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME"
-        //     }
-        // }
-        // stage('Deploy') {
-        //     steps {
-        //         sh ""
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME ${env.HASH_TAG}"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Hello Deploy"
+            }
+        }
     }
 }
