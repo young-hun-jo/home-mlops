@@ -19,6 +19,11 @@ pipeline {
                 }
             }
         }
+        stage('Check') {
+            steps {
+                echo "HASH_TAG: ${HASH_TAG}"
+            }
+        }
         // stage('Verbose parameters') {
         //     steps {
         //         echo "Params: $params.APP_NAME $params.AR_NAME"
