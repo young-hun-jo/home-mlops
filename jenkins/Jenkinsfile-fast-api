@@ -4,18 +4,30 @@ pipeline {
         choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
     }
 
+    environment {
+        HASH_TAG = $(openssl rand -base64 12)
+    }
+
     agent any
 
     stages {
-        stage('Verbose parameters') {
-            steps {
-                echo "Params: $params.APP_NAME $params.AR_NAME"
-            }
+        stage('TEST') {
+            echo "HASH_TAG: ${HASH_TAG}"
         }
-        stage('Build FastAPI') {
-            steps {
-                sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME"
-            }
-        }
+        // stage('Verbose parameters') {
+        //     steps {
+        //         echo "Params: $params.APP_NAME $params.AR_NAME"
+        //     }
+        // }
+        // stage('Build') {
+        //     steps {
+        //         sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME"
+        //     }
+        // }
+        // stage('Deploy') {
+        //     steps {
+        //         sh ""
+        //     }
+        // }
     }
 }
