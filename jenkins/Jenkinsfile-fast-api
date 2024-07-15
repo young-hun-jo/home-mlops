@@ -5,14 +5,18 @@ pipeline {
     }
 
     environment {
-        HASH_TAG = $(openssl rand -base64 12)
+        HASH_TAG = ""
     }
 
     agent any
 
     stages {
         stage('TEST') {
-            echo "HASH_TAG: ${HASH_TAG}"
+            steps {
+                script {
+                    env.HASH_TAG = sh "openssl rand -base64 12"
+                }
+            }
         }
         // stage('Verbose parameters') {
         //     steps {
