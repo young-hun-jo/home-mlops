@@ -7,11 +7,10 @@ pipeline {
     agent any
 
     stages {
-        stage('TEST') {
+        stage('Initialize hash') {
             steps {
                 script {
-                    env.HASH_TAG = sh "openssl rand -base64 12"
-                    // env.HASH_TAG = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
+                    env.HASH_TAG = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
                 }
             }
         }
@@ -20,11 +19,11 @@ pipeline {
                 echo "HASH_TAG: ${env.HASH_TAG}"
             }
         }
-        // stage('Verbose parameters') {
-        //     steps {
-        //         echo "Params: $params.APP_NAME $params.AR_NAME"
-        //     }
-        // }
+        stage('Verbose parameters') {
+            steps {
+                echo "Params: $params.APP_NAME $params.AR_NAME ${env.HASH_TAG}"
+            }
+        }
         // stage('Build') {
         //     steps {
         //         sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME"

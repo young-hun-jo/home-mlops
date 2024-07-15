@@ -4,10 +4,10 @@ LOGGER=$(date '+%Y-%m-%d %H:%M:%S')
 # args
 export APP_NAME="$1"
 export FASTAPI_AR_NAME="$2"
+export HASH_TAG="$3"
 
 # envs
 export ROOT_DIR=$(git rev-parse --show-toplevel)
-export HASH_TAG=$(openssl rand -base64 12)
 export FASTAPI_SVC_NAME="$APP_NAME"-fastapi-svc
 export FASTAPI_IMAGE_NAME=$FASTAPI_AR_NAME:$FASTAPI_SVC_NAME-$HASH_TAG
 export BENTO_SVC_NAME="$APP_NAME"-bento-svc
