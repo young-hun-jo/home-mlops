@@ -1,14 +1,14 @@
 pipeline {
     agent any
-    environment {
-        MY_VAR = ''
-    }
     stages {
-        stage('Initialize') {
+        stage('Setup Environment') {
             steps {
                 script {
-                    // 셸 명령어 실행 결과를 환경 변수에 저장
-                    env.MY_VAR = sh(script: 'echo hello', returnStdout: true).trim()
+                    // Capture the output of the shell command
+                    def output = sh(script: 'echo hello', returnStdout: true).trim()
+                    
+                    // Set the environment variable
+                    env.MY_VAR = output
                 }
             }
         }
