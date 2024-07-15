@@ -1,10 +1,20 @@
 pipeline {
+    parameters {
+        string(name: "APP_NAME", defaultValue: "tabular-diabetes-regressor", description: "fastapi application name")
+        choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
+    }
+
     agent any
 
     stages {
-        stage('make random value') {
+        stage('Verbose parameters') {
             steps {
-                sh "pwd && ls -l"
+                echo "Params: $params.APP_NAME $params.AR_NAME"
+            }
+        }
+        stage('Build FastAPI') {
+            steps {
+                sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME"
             }
         }
     }
