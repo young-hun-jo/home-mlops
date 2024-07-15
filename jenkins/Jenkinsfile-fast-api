@@ -5,7 +5,7 @@ pipeline {
     }
 
     environment {
-        HASH_TAG = ""
+        HASH_TAG = "zedd"
     }
 
     agent any
