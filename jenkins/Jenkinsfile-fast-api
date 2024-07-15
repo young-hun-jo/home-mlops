@@ -4,6 +4,10 @@ pipeline {
         choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
     }
 
+    environment {
+        HASH_TAG = ""
+    }
+
     agent any
 
     stages {
