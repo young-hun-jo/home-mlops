@@ -1,65 +1,43 @@
 pipeline {
+    parameters {
+        string(name: "APP_NAME", defaultValue: "tabular-diabetes-regressor", description: "fastapi application name")
+        choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
+    }
+
+    environment {
+        HASH_TAG = ""
+    }
+
     agent any
+
     stages {
-        stage('Setup Environment') {
+        stage('TEST') {
             steps {
                 script {
-                    // Capture the output of the shell command
-                    def output = sh(script: 'echo hello', returnStdout: true).trim()
-                    
-                    // Set the environment variable
-                    env.MY_VAR = output
+                    def HASH = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
+                    env.HASH_TAG = HASH
                 }
             }
         }
-        stage('Build') {
+        stage('Check') {
             steps {
-                echo "MY_VAR is ${env.MY_VAR}"
+                echo "HASH_TAG: ${env.HASH_TAG}"
             }
         }
+        // stage('Verbose parameters') {
+        //     steps {
+        //         echo "Params: $params.APP_NAME $params.AR_NAME"
+        //     }
+        // }
+        // stage('Build') {
+        //     steps {
+        //         sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME"
+        //     }
+        // }
+        // stage('Deploy') {
+        //     steps {
+        //         sh ""
+        //     }
+        // }
     }
 }
-
-// pipeline {
-//     parameters {
-//         string(name: "APP_NAME", defaultValue: "tabular-diabetes-regressor", description: "fastapi application name")
-//         choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
-//     }
-
-//     environment {
-//         HASH_TAG = ""
-//     }
-
-//     agent any
-
-//     stages {
-//         stage('TEST') {
-//             steps {
-//                 script {
-//                     env.HASH_TAG = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
-//                     // env.HASH_TAG = sh "openssl rand -base64 12"
-//                 }
-//             }
-//         }
-//         stage('Check') {
-//             steps {
-//                 echo "HASH_TAG: ${env.HASH_TAG}"
-//             }
-//         }
-//         // stage('Verbose parameters') {
-//         //     steps {
-//         //         echo "Params: $params.APP_NAME $params.AR_NAME"
-//         //     }
-//         // }
-//         // stage('Build') {
-//         //     steps {
-//         //         sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME"
-//         //     }
-//         // }
-//         // stage('Deploy') {
-//         //     steps {
-//         //         sh ""
-//         //     }
-//         // }
-//     }
-// }
