@@ -47,7 +47,7 @@ pipeline {
                 sh """
                 docker run -d --name $params.APP_NAME-bento-svc -p 3000:3000 \
                 -e BENTOML_SVC_NAME=$params.APP_NAME-bento-svc \
-                -e BENTOML_MODEL_NAME=$params.APP_NAME-bentom-model \
+                -e BENTOML_MODEL_NAME=$params.APP_NAME-bento-model \
                 ${env.BENTO_IMAGE} serve
                 """
             }
