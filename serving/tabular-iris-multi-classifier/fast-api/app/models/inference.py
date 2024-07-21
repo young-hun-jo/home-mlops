@@ -10,7 +10,7 @@ class Classifier(object):
     def __init__(self):
         self.bento_svc_name = os.getenv("BENTO_SVC_NAME", "localhost")
         self.headers = {"Content-Type": "application/json", "accept": "application/json"}
-        self.bento_svc = f"http://{self.bento_svc_name}:3000/predict"
+        self.bento_svc = f"http://localhost:3000/predict"
 
     def __call__(self, request: IrisRequest) -> IrisResponse:
         return self.forward(request)
