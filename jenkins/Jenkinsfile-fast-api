@@ -10,7 +10,7 @@ pipeline {
         stage('Initialize hash') {
             steps {
                 script {
-                    env.HASH_TAG = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
+                    env.HASH_TAG = sh(script: 'openssl rand -base64 12 | tr -d "/+="', returnStdout: true).trim()
                 }
             }
         }
