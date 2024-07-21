@@ -11,7 +11,7 @@ pipeline {
         stage('Check') {
             steps {
                 sh """
-                pip install -e common && which home && echo $PATH
+                pip install -e common && which home && echo $PATH && home
                 """
             }
         }
