@@ -6,7 +6,7 @@ pipeline {
         NAS_NAME = 'gs://zedd-mlruns'
         AR_NAME = 'jo181/bentoml-serving'
     }
-
+    
     agent any
 
     stages {
@@ -25,5 +25,5 @@ pipeline {
                 sh './serving/bento.sh ${APP_NAME} ${EXPERIMENT_ID} ${RUN_ID} ${AR_NAME}'
             }
         }
-        }
+    }
 }

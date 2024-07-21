@@ -1,0 +1,36 @@
+pipeline {
+    parameters {
+        string(name: "APP_NAME", defaultValue: "tabular-diabetes-regressor", description: "fastapi application name")
+        choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
+    }
+
+    agent any
+
+    stages {
+        stage('Initialize hash') {
+            steps {
+                script {
+                    env.HASH_TAG = sh(script: 'openssl rand -base64 12 | tr -d "/+="', returnStdout: true).trim()
+                }
+            }
+        }
+        stage('Verbose parameters') {
+            steps {
+                echo "Params: $params.APP_NAME $params.AR_NAME ${env.HASH_TAG}"
+            }
+        }
+        stage('Build') {
+            steps {
+                sh "./serving/fastapi.sh $params.APP_NAME $params.AR_NAME ${env.HASH_TAG}"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh """
+                docker run -d --name $params.APP_NAME-fastapi-svc -p 8000:8000 \
+                $params.AR_NAME:$params.APP_NAME-fastapi-svc-${env.HASH_TAG}
+                """
+            }
+        }
+    }
+}
