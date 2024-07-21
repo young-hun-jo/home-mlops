@@ -8,42 +8,49 @@ pipeline {
     }
     agent any
     stages {
-        stage('Verbose parameters') {
-            steps {
-                echo "Params: $params.APP_NAME $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME"
-            }
-        }
-        stage('Download from GCS') {
+        stage('Check') {
             steps {
                 sh """
-                gcloud auth activate-service-account --key-file=$SA_KEY_PATH
-                gsutil cp -r $params.NAS_NAME/$params.EXPERIMENT_ID/$params.RUN_ID serving/$params.APP_NAME/bento-ml
-                ls -l serving/$params.APP_NAME/bento-ml
+                pip install -e common && which home
                 """
             }
         }
-        stage('Build Bento') {
-            steps {
-                sh "./serving/bento.sh $params.APP_NAME $params.EXPERIMENT_ID $params.RUN_ID $params.AR_NAME"
-            }
-        }
-        stage('Fetch tag from image') {
-            steps {
-                script {
-                    env.HASH_TAG = sh(script: "cat < $HOME/bentoml/bentos/$params.APP_NAME-bento-svc/latest", returnStdout: true).trim()
-                    env.BENTO_IMAGE = "$params.AR_NAME:$params.APP_NAME-bento-svc-${env.HASH_TAG}"
-                }
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh """
-                docker run -d --name $params.APP_NAME-bento-svc -p 3000:3000 \
-                -e BENTOML_SVC_NAME=$params.APP_NAME-bento-svc \
-                -e BENTOML_MODEL_NAME=$params.APP_NAME-bento-model \
-                ${env.BENTO_IMAGE} serve
-                """
-            }
-        }
+        // stage('Verbose parameters') {
+        //     steps {
+        //         echo "Params: $params.APP_NAME $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME"
+        //     }
+        // }
+        // stage('Download from GCS') {
+        //     steps {
+        //         sh """
+        //         gcloud auth activate-service-account --key-file=$SA_KEY_PATH
+        //         gsutil cp -r $params.NAS_NAME/$params.EXPERIMENT_ID/$params.RUN_ID serving/$params.APP_NAME/bento-ml
+        //         ls -l serving/$params.APP_NAME/bento-ml
+        //         """
+        //     }
+        // }
+        // stage('Build Bento') {
+        //     steps {
+        //         sh "./serving/bento.sh $params.APP_NAME $params.EXPERIMENT_ID $params.RUN_ID $params.AR_NAME"
+        //     }
+        // }
+        // stage('Fetch tag from image') {
+        //     steps {
+        //         script {
+        //             env.HASH_TAG = sh(script: "cat < $HOME/bentoml/bentos/$params.APP_NAME-bento-svc/latest", returnStdout: true).trim()
+        //             env.BENTO_IMAGE = "$params.AR_NAME:$params.APP_NAME-bento-svc-${env.HASH_TAG}"
+        //         }
+        //     }
+        // }
+        // stage('Deploy') {
+        //     steps {
+        //         sh """
+        //         docker run -d --name $params.APP_NAME-bento-svc -p 3000:3000 \
+        //         -e BENTOML_SVC_NAME=$params.APP_NAME-bento-svc \
+        //         -e BENTOML_MODEL_NAME=$params.APP_NAME-bento-model \
+        //         ${env.BENTO_IMAGE} serve
+        //         """
+        //     }
+        // }
     }
 }

@@ -3,7 +3,7 @@ requires = ["setuptools>=65.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "home-mlops-training"
+name = "home-mlops"
 version = "0.0.0"
 authors = [
     { name="young-hun-jo", email="steadyist357@gmail.com"}
@@ -14,3 +14,6 @@ dependencies = [
     "mlflow==2.12.2",
     "bentoml==1.2.16"
 ]
+
+[project.scripts]
+home = "home.utils:transplant_mlflow_model"
