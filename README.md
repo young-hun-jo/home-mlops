@@ -102,10 +102,16 @@ python train.py
 - Jenkins UI 빌드 트리거 수행 예시
 
 ![스크린샷 2024-07-14 오후 10 27 16](https://github.com/user-attachments/assets/e7193a9f-1b82-4eda-a17f-00eddbe77cb4)
+![스크린샷 2024-07-21 오후 7 38 43](https://github.com/user-attachments/assets/93253540-033e-46e7-8a76-3dcd51da88ce)
 
 #### 1-5-2. Build FastAPI
-- (작업 진행 중..)
+- UI 에서 총 2가지의 파라미터를 지정
+  - Application Name : 목차 [1-1]에서 소개한 프로젝트 구조에서 $APP_NAME에 해당하는 디렉토리 이름
+  - Artifact Registry Name : Docker Hub에서 생성한 FastAPI 용 레포지토리 경로
+- Jenkins UI 빌드 트리거 수행 예시
 
+![스크린샷 2024-07-21 오후 7 40 54](https://github.com/user-attachments/assets/a99f8183-3f0a-4298-9be0-8c148e7dc6c2)
+![스크린샷 2024-07-21 오후 7 41 21](https://github.com/user-attachments/assets/161d65ec-288d-4a29-a5c7-b678cee64c66)
 
 ## 2. k8s 운영 환경(예정)
 - 미니 PC 총 3대로 k8s 홈 클러스터 구축 예정
@@ -117,70 +123,6 @@ python train.py
 
 - worker 노드를 위한 미니 PC 2대는 master 노드용 PC에 k8s 설치 및 클러스터 구성이 잘 완료된 뒤 추후에 구매할 예정
 
----
----
-# 🗑️ Archiving existing README 
-#### Step02: Build Serving(1) - BentoML
-- 4가지 파일이 필요
-```
-build.sh : build Bento, image, and push it to container registry
-bentofile.yaml : configuration for building Bento
-import.py : save model trained by MLflow to BentoML Model Store
-service.py : define BentoML Serving API (only defined functional interface not Class)
-```
-- 4개의 argument를 입력한 후 `build.sh` 스크립트 실행
-- 이 때, 반드시 `bentofile.yaml` 파일이 존재하는 경로에서 스크립트를 실행
-```bash
-export MLFLOW_EXPERIMENT_ID="experiment-id"     # MLflow에 모델이 학습될 때 등록된 실험 ID
-export MLFLOW_RUN_ID="run-id"                   # MLflow에 모델이 학습될 때 등록된 Run ID
-export APP_NAME="iris-classifier"               # 만들고자 하는 애플리케이션 이름 명시
-export BENTOML_AR_NAME="jo181/bentoml-serving"  # image가 저장될 registry repository 주소 
-
-./build.sh $MLFLOW_EXPERIMENT_ID $MLFLOW_RUN_ID $APP_NAME $BENTOML_AR_NAME
-```
-- registry에 가서 push된 이미지 이름 확인 후, 배포 때 활용 예정
-- 참고로, 빌드가 되면서 `bentofile.yaml`에 정의되어야 하는 `.python.packages`, `.models` 항목은 자동 반영되므로 별도로 사용자가 수정하지 않아도 됨
-
-#### Step03: Build Serving(2) - FastAPI
-- BentoML Serving API와 통신하는 로직을 추가여 소스코드 개발(<a href='https://github.com/young-hun-jo/home-mlops/blob/e277ef86d50a72b101b5c429c1e8d9e870d083f4/serving/tabular-iris-multi-classifier/fast-api/app/models/inference.py#L32-L36'>example</a>)
-- 2개의 argument를 입력한 후, `build.sh` 스크립트 실행
-- 이 때, 반드시 `Dockerfile` 파일이 존재하는 경로에서 스크립트를 실행
-```bash
-export APP_NAME="iris-classifier" # 만들고자 하는 애플리케이션 이름 명시(BentoML에서의 이름과 동일 권장)
-export FASTAPI_AR_NAME="jo181/fastapi-serving"  # image가 저장될 registry repository 주소
-
-./build.sh $APP_NAME $FASTAPI_AR_NAME
-```
-- registry에 가서 push된 이미지 이름 확인 후, 배포 때 활용 예정
-
-#### Step04: Deployment
-- `docker-compose.yaml` 파엘에 아래의 내용을 기입
-```yml
-version: '3.0'
-services:
-  ${APP_NAME}-bento-svc:
-    image: `specify your bento image uri`
-    environment:
-      - BENTOML_SVC_NAME=${APP_NAME}-bento-svc
-      - BENTOML_MODEL_NAME=${APP_NAME}-bento-model
-    command: serve
-  ${APP_NAME}-fastapi-svc:
-    image: `specify your fastapi image uri`
-    ports:
-      - "8000:8000"
-    depends_on:
-      - ${APP_NAME}-bento-svc
-```
-- BentoML, FastAPI 배포
-```bash
-docker-compose up -d
-```
-
-#### Step05: Test
-- FastAPI application URL
-```
-http://localhost:8000
-```
 
 ---
 ## 🔗 Referecne
