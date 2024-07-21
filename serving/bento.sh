@@ -64,7 +64,7 @@ fi
 # build bento, containerize it and push it to container registry
 #================================================================
 # save mlflow-trained model to bento-ml Model Store 
-python $BENTO_APP_DIR/import.py --bentoml_model_name="$BENTOML_MODEL_NAME" --model_uri="$MODEL_URI" && echo "$LOOGER BENTOML MODEL STORE" && ls -l $HOME/bentoml/models && \
+home --bentoml_model_name="$BENTOML_MODEL_NAME" --model_uri="$MODEL_URI" && echo "$LOOGER BENTOML MODEL STORE" && ls -l $HOME/bentoml/models && \
 # update `models` and `python.packages` info in bentofile configuration
 tmp="${BENTOML_MODEL_NAME}:latest" yq e --inplace '.models[0] = env(tmp)' $bentofile_path && \
 updatePkgOfBentofileYaml $requirements_path $bentofile_path && \
