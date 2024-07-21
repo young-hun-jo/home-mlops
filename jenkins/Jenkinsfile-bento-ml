@@ -7,6 +7,7 @@ pipeline {
         choice(name: "AR_NAME", choices: ["jo181/bentoml-serving"], description: "repository of image registry")
     }
     agent any
+    stages {
         stage('Verbose parameters') {
             steps {
                 echo "Params: $params.APP_NAME $params.EXPERIMENT_ID, $params.RUN_ID, $params.NAS_NAME, $params.AR_NAME"
@@ -23,7 +24,10 @@ pipeline {
         }
         stage('Build Bento') {
             steps {
-                sh "./serving/bento.sh $params.APP_NAME $params.EXPERIMENT_ID $params.RUN_ID $params.AR_NAME"
+                sh """
+                pip install common
+                ./serving/bento.sh $params.APP_NAME $params.EXPERIMENT_ID $params.RUN_ID $params.AR_NAME
+                """
             }
         }
         stage('Fetch tag from image') {
