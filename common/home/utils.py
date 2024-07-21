@@ -31,5 +31,9 @@ def transplant_mlflow_model() -> None:
     transplant_mlflow_model_to_bentoml_model_store(args)
 
 
+def greet():
+    print("Hello console script in greet!")
+
+
 if __name__ == "__main__":
-    transplant_mlflow_model()
+    greet()

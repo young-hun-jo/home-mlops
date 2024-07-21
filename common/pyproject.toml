@@ -16,4 +16,4 @@ dependencies = [
 ]
 
 [project.scripts]
-home = "home.utils:transplant_mlflow_model"
+home = "home.utils:greet"
