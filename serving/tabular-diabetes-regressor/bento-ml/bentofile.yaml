@@ -5,6 +5,7 @@ labels:
   stage: local
 include:
   - "service.py"
+# from below, sector that don't need to modify
 python:
   packages:
     - mlflow==2.12.2
@@ -15,6 +16,5 @@ python:
     - pyyaml==6.0.1
     - scikit-learn==1.4.2
     - scipy==1.13.0
-# sector that don't need to modify
 models:
   - tabular-diabetes-regressor-bento-model:latest

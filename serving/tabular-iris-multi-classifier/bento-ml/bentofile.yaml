@@ -1,15 +1,15 @@
 # sector that modify
-service: "service:svc"
+service: "serving.tabular-iris-multi-classifier.bento-ml.service:svc"
 labels:
   onwer: zedd-ai
   stage: local
 include:
   - "service.py"
+# from below, sector that don't need to modify
 python:
   packages:
     - mlflow # necessarily install for using mlflow-trained model in bento-ml serving
     - scikit-learn
     - numpy
-# sector that don't need to modify
 models:
   - tabular-iris-multi-classifier-v2-bento-model:latest
