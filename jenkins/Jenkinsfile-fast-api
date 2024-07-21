@@ -3,9 +3,7 @@ pipeline {
         string(name: "APP_NAME", defaultValue: "tabular-diabetes-regressor", description: "fastapi application name")
         choice(name: "AR_NAME", choices: ["jo181/fastapi-serving"], description: "repository of image registry")
     }
-
     agent any
-
     stages {
         stage('Initialize hash') {
             steps {

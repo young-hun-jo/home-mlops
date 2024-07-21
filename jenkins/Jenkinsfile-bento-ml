@@ -6,9 +6,7 @@ pipeline {
         string(name: "NAS_NAME", defaultValue: "gs://zedd-mlruns", description: "remote network storage path")
         choice(name: "AR_NAME", choices: ["jo181/bentoml-serving"], description: "repository of image registry")
     }
-
     agent any
-
     stages {
         stage('Verbose parameters') {
             steps {
