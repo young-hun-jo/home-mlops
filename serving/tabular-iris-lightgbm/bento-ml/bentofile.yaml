@@ -1,5 +1,5 @@
 # sector that modify
-service: "service:svc"
+service: "serving.tabular-iris-lightgbm.bento-ml.service:svc"
 labels:
   owner: zedd-ai
   stage: local

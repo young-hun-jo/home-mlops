@@ -108,16 +108,16 @@ class IrisTabularTrainer(object):
             # model
             model_info = mlflow.sklearn.log_model(
                 sk_model=model,
-                artifact_path="iris_lgbm",
+                artifact_path="iris_lgbm_gcs",
                 signature=signature,
                 input_example=X_test,
-                registered_model_name="iris-lgbm"
+                registered_model_name="iris-lgbm-gcs"
             )
 
 
 if __name__ == "__main__":
-    experiment_name = "tabular-iris-lgbm-exp"
-    run_name = "tabular-iris-iris-lgbm-run"
+    experiment_name = "tabular-iris-lgbm-exp-gcs"
+    run_name = "tabular-iris-iris-lgbm-run-gcs"
     problem = "classification"
 
     trainer = IrisTabularTrainer(experiment_name, run_name, problem)
