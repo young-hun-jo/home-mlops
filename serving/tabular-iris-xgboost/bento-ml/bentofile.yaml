@@ -1,5 +1,5 @@
 # sector that modify
-service: "serving.tabular-diabetes-regressor.bento-ml.service:svc"
+service: "serving.tabular-iris-xgboost.bento-ml.service:svc"
 labels:
   onwer: zedd-ai
   stage: local
