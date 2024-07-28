@@ -110,16 +110,16 @@ class IrisTabularTrainer(object):
             # log model
             _ = mlflow.pytorch.log_model(
                 pytorch_model=model,
-                artifact_path="iris_torch",
+                artifact_path="iris_torch_gcs",
                 signature=signature,
                 input_example=self.X_np,  # `Tensor` is not supported
-                registered_model_name="iris-torch"
+                registered_model_name="iris-torch-gcs"
             )
 
 
 if __name__ == "__main__":
-    experiment_name = "tabular-iris-pytorch-v1-exp"
-    run_name = "tabular-iris-pytorch-v1-run"
+    experiment_name = "tabular-iris-pytorch-v1-exp-gcs"
+    run_name = "tabular-iris-pytorch-v1-run-gcs"
     problem = "classification"
 
     trainer = IrisTabularTrainer(experiment_name, run_name, problem)
